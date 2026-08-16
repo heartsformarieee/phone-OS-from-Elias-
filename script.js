@@ -1,11 +1,30 @@
 // ========================================
-// ELIAS OS 1.0
+// ELIAS OS 1.1
+// LOCK SCREEN + NOTIFICATIONS
 // ========================================
 
 
-// ========================================
 // ELEMENTS
-// ========================================
+
+const lockScreen =
+  document.getElementById(
+    "lockScreen"
+  );
+
+const lockTime =
+  document.getElementById(
+    "lockTime"
+  );
+
+const lockDate =
+  document.getElementById(
+    "lockDate"
+  );
+
+const statusBar =
+  document.getElementById(
+    "statusBar"
+  );
 
 const statusTime =
   document.getElementById(
@@ -40,6 +59,21 @@ const calendarIconDay =
 const calendarIconNumber =
   document.getElementById(
     "calendarIconNumber"
+  );
+
+const eliasNotification =
+  document.getElementById(
+    "eliasNotification"
+  );
+
+const moriNotification =
+  document.getElementById(
+    "moriNotification"
+  );
+
+const calendarNotification =
+  document.getElementById(
+    "calendarNotification"
   );
 
 const eliasWidget =
@@ -113,9 +147,7 @@ const closePhoto =
   );
 
 
-// ========================================
-// CLOCK + DATE
-// ========================================
+// CLOCK
 
 function updateClock() {
 
@@ -123,12 +155,31 @@ function updateClock() {
     new Date();
 
 
-  statusTime.textContent =
+  const time =
     now.toLocaleTimeString(
       [],
       {
         hour: "2-digit",
         minute: "2-digit"
+      }
+    );
+
+
+  statusTime.textContent =
+    time;
+
+
+  lockTime.textContent =
+    time;
+
+
+  lockDate.textContent =
+    now.toLocaleDateString(
+      [],
+      {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
       }
     );
 
@@ -228,15 +279,173 @@ function updateClock() {
 
 updateClock();
 
+
 setInterval(
   updateClock,
   30000
 );
 
 
-// ========================================
+// NOTIFICATIONS
+
+const eliasNotifications = [
+
+  "come here.",
+
+  "you awake?",
+
+  "I know you saw this.",
+
+  "Mori stole my spot again.",
+
+  "where did you disappear to?",
+
+  "I was wondering when you'd open this.",
+
+  "we should get sushi.",
+
+  "hey. look at me.",
+
+  "I miss your face.",
+
+  "you better not be ignoring me for Mori."
+
+];
+
+
+const moriNotifications = [
+
+  "Motion detected in kitchen.",
+
+  "Mori is staring directly into the camera.",
+
+  "Possible snack-related activity detected.",
+
+  "Mori has occupied Elias's seat.",
+
+  "Motion detected near food bowl.",
+
+  "Mori appears to be plotting something."
+
+];
+
+
+const calendarNotifications = [
+
+  "Sushi date tonight ♡",
+
+  "Movie night at 20:00.",
+
+  "Reminder: give Mori attention.",
+
+  "Night walk later? 🌙",
+
+  "Stay-home date tonight.",
+
+  "Reminder: steal Elias's hoodie."
+
+];
+
+
+function randomItem(
+  array
+) {
+
+  return array[
+    Math.floor(
+      Math.random() *
+      array.length
+    )
+  ];
+
+}
+
+
+function loadNotifications() {
+
+  eliasNotification.textContent =
+    randomItem(
+      eliasNotifications
+    );
+
+
+  moriNotification.textContent =
+    randomItem(
+      moriNotifications
+    );
+
+
+  calendarNotification.textContent =
+    randomItem(
+      calendarNotifications
+    );
+
+}
+
+
+loadNotifications();
+
+
+// LOCK / UNLOCK
+
+function unlockPhone() {
+
+  lockScreen.classList.add(
+    "hidden"
+  );
+
+
+  statusBar.classList.remove(
+    "hidden"
+  );
+
+
+  homeScreen.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+function lockPhone() {
+
+  appWindow.classList.add(
+    "hidden"
+  );
+
+
+  homeScreen.classList.add(
+    "hidden"
+  );
+
+
+  statusBar.classList.add(
+    "hidden"
+  );
+
+
+  photoOverlay.classList.add(
+    "hidden"
+  );
+
+
+  loadNotifications();
+
+
+  lockScreen.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+lockScreen.addEventListener(
+  "click",
+  unlockPhone
+);
+
+
 // ELIAS WIDGET
-// ========================================
 
 const eliasWidgetLines = [
 
@@ -267,25 +476,16 @@ eliasWidget.addEventListener(
   "click",
   function() {
 
-    const line =
-      eliasWidgetLines[
-        Math.floor(
-          Math.random() *
-          eliasWidgetLines.length
-        )
-      ];
-
-
     eliasWidgetText.textContent =
-      line;
+      randomItem(
+        eliasWidgetLines
+      );
 
   }
 );
 
 
-// ========================================
 // MORI WIDGET
-// ========================================
 
 const moriLines = [
 
@@ -311,20 +511,15 @@ moriWidget.addEventListener(
   function() {
 
     moriWidgetText.textContent =
-      moriLines[
-        Math.floor(
-          Math.random() *
-          moriLines.length
-        )
-      ];
+      randomItem(
+        moriLines
+      );
 
   }
 );
 
 
-// ========================================
 // APP OPENING
-// ========================================
 
 document
   .querySelectorAll(
@@ -353,6 +548,11 @@ function openApp(
 ) {
 
   homeScreen.classList.add(
+    "hidden"
+  );
+
+
+  statusBar.classList.add(
     "hidden"
   );
 
@@ -454,9 +654,7 @@ function openApp(
 }
 
 
-// ========================================
 // CLOSE APP
-// ========================================
 
 closeApp.addEventListener(
   "click",
@@ -472,6 +670,11 @@ closeApp.addEventListener(
     );
 
 
+    statusBar.classList.remove(
+      "hidden"
+    );
+
+
     window.scrollTo(
       0,
       0
@@ -481,9 +684,7 @@ closeApp.addEventListener(
 );
 
 
-// ========================================
 // MESSAGES
-// ========================================
 
 function renderMessages() {
 
@@ -505,11 +706,15 @@ function renderMessages() {
       </div>
 
       <div>
-        <strong>Elias ♡</strong>
+
+        <strong>
+          Elias ♡
+        </strong>
 
         <small>
           online-ish
         </small>
+
       </div>
 
     </div>
@@ -689,9 +894,7 @@ function sendFakeReply(
 }
 
 
-// ========================================
 // PHOTOS
-// ========================================
 
 function renderPhotos() {
 
@@ -721,54 +924,43 @@ function renderPhotos() {
         data-photo="couple.PNG"
         data-caption="Us ♡"
       >
-
         <img
           src="couple.PNG"
           alt=""
         >
-
       </button>
-
 
       <button
         class="photo-card"
         data-photo="morii.PNG"
         data-caption="Mori being Mori."
       >
-
         <img
           src="morii.PNG"
           alt=""
         >
-
       </button>
-
 
       <button
         class="photo-card"
         data-photo="couple.PNG"
         data-caption="One of my favorites."
       >
-
         <img
           src="couple.PNG"
           alt=""
         >
-
       </button>
-
 
       <button
         class="photo-card"
         data-photo="morii.PNG"
         data-caption="He absolutely owns this phone."
       >
-
         <img
           src="morii.PNG"
           alt=""
         >
-
       </button>
 
     </div>
@@ -800,9 +992,7 @@ function renderPhotos() {
 }
 
 
-// ========================================
 // PHOTO VIEWER
-// ========================================
 
 function openPhoto(
   src,
@@ -836,9 +1026,7 @@ closePhoto.addEventListener(
 );
 
 
-// ========================================
 // NOTES
-// ========================================
 
 function renderNotes() {
 
@@ -909,9 +1097,7 @@ function renderNotes() {
 }
 
 
-// ========================================
 // MORI CAM
-// ========================================
 
 function renderMori() {
 
@@ -979,12 +1165,9 @@ function renderMori() {
 
 
         text.textContent =
-          events[
-            Math.floor(
-              Math.random() *
-              events.length
-            )
-          ];
+          randomItem(
+            events
+          );
 
       }
     );
@@ -992,9 +1175,7 @@ function renderMori() {
 }
 
 
-// ========================================
 // CALENDAR
-// ========================================
 
 function renderCalendar() {
 
@@ -1060,9 +1241,7 @@ function renderCalendar() {
 }
 
 
-// ========================================
 // MUSIC
-// ========================================
 
 function renderMusic() {
 
@@ -1126,9 +1305,7 @@ function renderMusic() {
 }
 
 
-// ========================================
 // US
-// ========================================
 
 function renderUs() {
 
@@ -1206,9 +1383,7 @@ function renderUs() {
 }
 
 
-// ========================================
 // SETTINGS
-// ========================================
 
 function renderSettings() {
 
@@ -1238,7 +1413,7 @@ function renderSettings() {
       </small>
 
       <strong>
-        1.0
+        1.1
       </strong>
 
     </div>
@@ -1281,6 +1456,25 @@ function renderSettings() {
       </strong>
 
     </div>
+
+
+    <button
+      id="lockPhoneButton"
+      class="lock-button"
+      type="button"
+    >
+      Lock Elias OS
+    </button>
     `;
+
+
+  document
+    .getElementById(
+      "lockPhoneButton"
+    )
+    .addEventListener(
+      "click",
+      lockPhone
+    );
 
 }
