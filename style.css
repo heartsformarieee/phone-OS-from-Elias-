@@ -46,9 +46,7 @@ button {
 }
 
 
-/* ========================================
-   WALLPAPER
-======================================== */
+/* WALLPAPER */
 
 .wallpaper {
   position: fixed;
@@ -85,9 +83,7 @@ button {
 }
 
 
-/* ========================================
-   LOCK SCREEN
-======================================== */
+/* LOCK SCREEN */
 
 .lock-screen {
   position: fixed;
@@ -146,9 +142,7 @@ button {
 }
 
 
-/* ========================================
-   NOTIFICATIONS
-======================================== */
+/* NOTIFICATIONS */
 
 .lock-notifications {
   display: flex;
@@ -274,9 +268,7 @@ button {
 }
 
 
-/* ========================================
-   NOW PLAYING
-======================================== */
+/* NOW PLAYING */
 
 .lock-now-playing {
   display: grid;
@@ -363,9 +355,7 @@ button {
 }
 
 
-/* ========================================
-   UNLOCK
-======================================== */
+/* UNLOCK */
 
 .unlock-area {
   margin-top: auto;
@@ -394,9 +384,7 @@ button {
 }
 
 
-/* ========================================
-   STATUS BAR
-======================================== */
+/* STATUS BAR */
 
 .status-bar {
   position: fixed;
@@ -443,9 +431,7 @@ button {
 }
 
 
-/* ========================================
-   HOME
-======================================== */
+/* HOME */
 
 .home-screen {
   position: relative;
@@ -502,9 +488,7 @@ button {
 }
 
 
-/* ========================================
-   ELIAS WIDGET
-======================================== */
+/* ELIAS WIDGET */
 
 .elias-widget {
   width: 100%;
@@ -619,9 +603,7 @@ button {
 }
 
 
-/* ========================================
-   SMALL WIDGETS
-======================================== */
+/* SMALL WIDGETS */
 
 .small-widgets {
   display: grid;
@@ -713,9 +695,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   APP GRID
-======================================== */
+/* APP GRID */
 
 .apps-grid {
   display: grid;
@@ -859,9 +839,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   DOCK
-======================================== */
+/* DOCK */
 
 .dock {
   position: fixed;
@@ -910,9 +888,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   APP WINDOW
-======================================== */
+/* APP WINDOW */
 
 .app-window {
   position: fixed;
@@ -997,9 +973,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   MESSAGES
-======================================== */
+/* MESSAGES */
 
 .contact-card {
   display: flex;
@@ -1113,9 +1087,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   PHOTOS
-======================================== */
+/* PHOTOS */
 
 .photos-heading {
   margin:
@@ -1190,9 +1162,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   SCRAPBOOK
-======================================== */
+/* SCRAPBOOK */
 
 .scrapbook-viewer {
   display: flex;
@@ -1273,9 +1243,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   NOTES
-======================================== */
+/* NOTES */
 
 .note-card {
   margin-bottom: 10px;
@@ -1289,9 +1257,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   MORI CAM
-======================================== */
+/* MORI CAM */
 
 .mori-cam {
   text-align: center;
@@ -1331,9 +1297,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   CALENDAR
-======================================== */
+/* CALENDAR */
 
 .calendar-event {
   margin-bottom: 10px;
@@ -1347,9 +1311,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   INFO CARDS
-======================================== */
+/* INFO */
 
 .info-card {
   margin-bottom: 10px;
@@ -1363,9 +1325,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   MUSIC
-======================================== */
+/* MUSIC */
 
 .music-player {
   width: 100%;
@@ -1397,8 +1357,7 @@ button.small-widget {
 
   border-radius: 28px;
 
-  background:
-    #120d13;
+  background: #120d13;
 
   box-shadow:
     0 22px 48px
@@ -1413,17 +1372,10 @@ button.small-widget {
   width: 100% !important;
   height: 100% !important;
 
-  max-width: none !important;
-  max-height: none !important;
-
   display: block;
 
   object-fit: cover !important;
   object-position: center !important;
-
-  border-radius: 0;
-
-  transform: none;
 }
 
 .real-album-art.playing {
@@ -1619,9 +1571,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   PHOTO OVERLAY
-======================================== */
+/* PHOTO OVERLAY */
 
 .photo-overlay {
   position: fixed;
@@ -1674,9 +1624,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   CALL SCREEN
-======================================== */
+/* INCOMING CALL */
 
 .incoming-call-overlay {
   position: fixed;
@@ -1690,16 +1638,54 @@ button.small-widget {
   justify-content: center;
 
   padding:
-    75px
+    calc(
+      72px +
+      env(safe-area-inset-top)
+    )
     25px
-    55px;
+    calc(
+      58px +
+      env(safe-area-inset-bottom)
+    );
 
   background:
     linear-gradient(
       180deg,
-      rgba(26,15,24,0.96),
-      rgba(7,5,8,0.99)
+      #23151f,
+      #080609 72%
     );
+
+  backdrop-filter: blur(28px);
+
+  -webkit-backdrop-filter:
+    blur(28px);
+}
+
+.incoming-call-overlay.ringing {
+  animation:
+    ringingPulse
+    1.3s
+    ease-in-out
+    infinite;
+}
+
+@keyframes ringingPulse {
+
+  0% {
+    background-color:
+      rgba(30,16,26,1);
+  }
+
+  50% {
+    background-color:
+      rgba(54,27,42,1);
+  }
+
+  100% {
+    background-color:
+      rgba(30,16,26,1);
+  }
+
 }
 
 .incoming-call-content {
@@ -1712,33 +1698,75 @@ button.small-widget {
   flex-direction: column;
 
   align-items: center;
+
+  text-align: center;
 }
 
-.incoming-avatar {
-  width: 110px;
-  height: 110px;
+.incoming-small {
+  margin:
+    0
+    0
+    26px;
 
-  display: flex;
+  color: #b78596;
 
-  align-items: center;
-  justify-content: center;
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 4px;
+}
+
+.caller-photo-shell {
+  width: 130px;
+  height: 130px;
+
+  overflow: hidden;
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      #633247,
-      #21121d
-    );
+  border:
+    2px solid
+    rgba(255,158,188,0.22);
 
-  color: #f2b4c7;
+  background:
+    #181016;
+
+  box-shadow:
+    0 22px 50px
+    rgba(0,0,0,0.35);
+}
+
+.caller-photo {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.incoming-call-content h2 {
+  margin:
+    22px
+    0
+    6px;
 
   font-family:
     Georgia,
     serif;
 
-  font-size: 44px;
+  font-size: 34px;
+
+  font-weight: 400;
+}
+
+.incoming-call-content > p:not(.incoming-small) {
+  margin: 0;
+
+  color: #aa8795;
+
+  font-size: 12px;
 }
 
 .incoming-call-actions {
@@ -1749,34 +1777,65 @@ button.small-widget {
   display: flex;
 
   justify-content: space-around;
+
+  align-items: center;
+
+  gap: 45px;
 }
 
 .call-action {
-  width: 76px;
-  height: 76px;
+  width: 78px;
+  height: 78px;
+
+  position: relative;
 
   border: none;
 
   border-radius: 50%;
 
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   color: white;
 
-  font-size: 24px;
+  font-size: 25px;
+}
+
+.call-action span {
+  position: absolute;
+
+  top: 91px;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  color: #eee2e7;
+
+  font-size: 10px;
+
+  white-space: nowrap;
 }
 
 .call-action.decline,
 .call-action.end {
-  background: #b94356;
+  background: #bd4358;
 }
 
 .call-action.accept {
-  background: #4f9863;
+  background: #4f9b67;
+}
+
+.active-call .caller-photo-shell {
+  width: 115px;
+  height: 115px;
 }
 
 
-/* ========================================
-   MOBILE TWEAK
-======================================== */
+/* MOBILE */
 
 @media (
   max-width: 390px
@@ -1790,9 +1849,7 @@ button.small-widget {
 }
 
 
-/* ========================================
-   HIDDEN
-======================================== */
+/* HIDDEN */
 
 .hidden {
   display: none !important;
