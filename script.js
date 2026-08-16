@@ -1,8 +1,7 @@
 // ========================================
-// ELIAS OS 1.4.1
-// FIXED MUSIC ARTWORK LAYOUT
-// LOCK SCREEN + NOTIFICATIONS
-// PHOTOS + SCRAPBOOK + REAL MUSIC + CALLS
+// ELIAS OS 1.5
+// FULL CALL SYSTEM
+// MUSIC + LOCK SCREEN + PHOTOS + SCRAPBOOK
 // ========================================
 
 
@@ -108,7 +107,18 @@ const song = {
 
 
 // ========================================
-// GLOBAL AUDIO PLAYER
+// CALL DATA
+// ========================================
+
+const callData = {
+  ringtone: "Y-3.mp3",
+  callerPhoto: "childhood.PNG",
+  callerName: "Elias ♡"
+};
+
+
+// ========================================
+// GLOBAL AUDIO
 // ========================================
 
 const musicAudio =
@@ -119,6 +129,20 @@ musicAudio.preload =
 
 musicAudio.volume =
   1;
+
+
+const ringtoneAudio =
+  new Audio(callData.ringtone);
+
+ringtoneAudio.preload =
+  "auto";
+
+ringtoneAudio.loop =
+  true;
+
+ringtoneAudio.volume =
+  0.85;
+
 
 let repeatEnabled =
   false;
@@ -697,6 +721,14 @@ function loadNotifications() {
 }
 
 
+function showMissedCallNotification() {
+
+  eliasNotification.textContent =
+    "Missed call from Elias ♡";
+
+}
+
+
 loadNotifications();
 
 
@@ -1093,7 +1125,7 @@ musicAudio.addEventListener(
 
 
 // ========================================
-// FAKE INCOMING CALL
+// CALL SYSTEM
 // ========================================
 
 let activeCallOverlay =
@@ -1104,6 +1136,43 @@ let callTimerInterval =
 
 let callSeconds =
   0;
+
+let callAnswered =
+  false;
+
+
+async function startRingtone() {
+
+  try {
+
+    ringtoneAudio.currentTime =
+      0;
+
+
+    await ringtoneAudio.play();
+
+  }
+
+  catch (error) {
+
+    console.log(
+      "Ringtone needs a user interaction first:",
+      error
+    );
+
+  }
+
+}
+
+
+function stopRingtone() {
+
+  ringtoneAudio.pause();
+
+  ringtoneAudio.currentTime =
+    0;
+
+}
 
 
 function createIncomingCall() {
@@ -1117,6 +1186,10 @@ function createIncomingCall() {
   }
 
 
+  callAnswered =
+    false;
+
+
   const overlay =
     document.createElement(
       "div"
@@ -1124,7 +1197,7 @@ function createIncomingCall() {
 
 
   overlay.className =
-    "incoming-call-overlay";
+    "incoming-call-overlay ringing";
 
 
   overlay.innerHTML =
@@ -1135,13 +1208,22 @@ function createIncomingCall() {
         INCOMING CALL
       </p>
 
-      <div class="incoming-avatar">
-        E
+
+      <div class="caller-photo-shell">
+
+        <img
+          src="${callData.callerPhoto}"
+          class="caller-photo"
+          alt="Elias"
+        >
+
       </div>
 
+
       <h2>
-        Elias ♡
+        ${callData.callerName}
       </h2>
+
 
       <p id="callStatus">
         Elias OS Audio
@@ -1155,10 +1237,13 @@ function createIncomingCall() {
           class="call-action decline"
           type="button"
         >
+
           ✕
+
           <span>
             Decline
           </span>
+
         </button>
 
 
@@ -1167,10 +1252,13 @@ function createIncomingCall() {
           class="call-action accept"
           type="button"
         >
+
           ☎
+
           <span>
             Accept
           </span>
+
         </button>
 
       </div>
@@ -1188,13 +1276,20 @@ function createIncomingCall() {
     overlay;
 
 
+  startRingtone();
+
+
   document
     .getElementById(
       "declineCall"
     )
     .addEventListener(
       "click",
-      endCall
+      function() {
+
+        declineCall();
+
+      }
     );
 
 
@@ -1204,7 +1299,11 @@ function createIncomingCall() {
     )
     .addEventListener(
       "click",
-      acceptCall
+      function() {
+
+        acceptCall();
+
+      }
     );
 
 }
@@ -1219,6 +1318,23 @@ function acceptCall() {
     return;
 
   }
+
+
+  callAnswered =
+    true;
+
+
+  stopRingtone();
+
+
+  activeCallOverlay.classList.remove(
+    "ringing"
+  );
+
+
+  activeCallOverlay.classList.add(
+    "active-call"
+  );
 
 
   const status =
@@ -1244,10 +1360,13 @@ function acceptCall() {
       class="call-action end"
       type="button"
     >
+
       ✕
+
       <span>
         End
       </span>
+
     </button>
     `;
 
@@ -1258,7 +1377,11 @@ function acceptCall() {
     )
     .addEventListener(
       "click",
-      endCall
+      function() {
+
+        endCall();
+
+      }
     );
 
 
@@ -1299,7 +1422,27 @@ function acceptCall() {
 }
 
 
+function declineCall() {
+
+  callAnswered =
+    false;
+
+
+  stopRingtone();
+
+
+  showMissedCallNotification();
+
+
+  endCall();
+
+}
+
+
 function endCall() {
+
+  stopRingtone();
+
 
   if (
     callTimerInterval
@@ -1351,6 +1494,7 @@ function unlockPhone() {
   );
 
 
+  // Occasional surprise call
   if (
     Math.random() < 0.12
   ) {
@@ -2380,7 +2524,7 @@ function renderCalendar() {
 
 
 // ========================================
-// MUSIC APP
+// MUSIC
 // ========================================
 
 function renderMusic() {
@@ -2449,16 +2593,13 @@ function renderMusic() {
 
       <div class="main-music-controls">
 
-
         <button
           id="backButton"
           class="secondary-music-button"
           type="button"
         >
           ↶
-          <small>
-            10
-          </small>
+          <small>10</small>
         </button>
 
 
@@ -2481,17 +2622,13 @@ function renderMusic() {
           type="button"
         >
           ↷
-          <small>
-            10
-          </small>
+          <small>10</small>
         </button>
-
 
       </div>
 
 
       <div class="music-extra-controls">
-
 
         <button
           id="shuffleButton"
@@ -2518,15 +2655,12 @@ function renderMusic() {
           🔁
         </button>
 
-
       </div>
 
 
       <div class="volume-wrap">
 
-        <span>
-          🔈
-        </span>
+        <span>🔈</span>
 
         <input
           id="volumeSlider"
@@ -2538,9 +2672,7 @@ function renderMusic() {
           value="${musicAudio.volume}"
         >
 
-        <span>
-          🔊
-        </span>
+        <span>🔊</span>
 
       </div>
 
@@ -2707,67 +2839,32 @@ function renderSettings() {
   appContent.innerHTML =
     `
     <div class="info-card">
-
-      <small>
-        DEVICE
-      </small>
-
-      <strong>
-        Elias OS
-      </strong>
-
+      <small>DEVICE</small>
+      <strong>Elias OS</strong>
     </div>
 
 
     <div class="info-card">
-
-      <small>
-        VERSION
-      </small>
-
-      <strong>
-        1.4.1
-      </strong>
-
+      <small>VERSION</small>
+      <strong>1.5</strong>
     </div>
 
 
     <div class="info-card">
-
-      <small>
-        MUSIC
-      </small>
-
-      <strong>
-        ${song.title}
-      </strong>
-
+      <small>MUSIC</small>
+      <strong>${song.title}</strong>
     </div>
 
 
     <div class="info-card">
-
-      <small>
-        PHOTOS
-      </small>
-
-      <strong>
-        ${photoFiles.length} photos
-      </strong>
-
+      <small>CALLER</small>
+      <strong>${callData.callerName}</strong>
     </div>
 
 
     <div class="info-card">
-
-      <small>
-        SCRAPBOOK
-      </small>
-
-      <strong>
-        ${scrapbookPages.length} memories
-      </strong>
-
+      <small>RINGTONE</small>
+      <strong>Y-3.mp3</strong>
     </div>
 
 
