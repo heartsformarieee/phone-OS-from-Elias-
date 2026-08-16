@@ -1,7 +1,8 @@
 // ========================================
-// ELIAS OS 1.3
+// ELIAS OS 1.4
+// FULL MEDIA PLAYER + CALLS
 // LOCK SCREEN + NOTIFICATIONS
-// PHOTOS + SCRAPBOOK + REAL MUSIC
+// PHOTOS + SCRAPBOOK
 // ========================================
 
 
@@ -95,10 +96,147 @@ const closePhoto =
 
 
 // ========================================
-// AUDIO STATE
+// MUSIC DATA
 // ========================================
 
-let currentAudio = null;
+const song = {
+  src: "our song.mp3",
+  title: "Our Song",
+  artist: "Marie × Elias",
+  artwork: "couple.PNG"
+};
+
+
+// ========================================
+// GLOBAL AUDIO PLAYER
+// ========================================
+
+const musicAudio =
+  new Audio(song.src);
+
+musicAudio.preload =
+  "metadata";
+
+musicAudio.volume =
+  1;
+
+let repeatEnabled =
+  false;
+
+let shuffleEnabled =
+  false;
+
+let songHasStarted =
+  false;
+
+
+// ========================================
+// MEDIA SESSION
+// ========================================
+
+function setupMediaSession() {
+
+  if (
+    !("mediaSession" in navigator)
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    navigator.mediaSession.metadata =
+      new MediaMetadata({
+
+        title:
+          song.title,
+
+        artist:
+          song.artist,
+
+        album:
+          "Elias OS ♡",
+
+        artwork: [
+
+          {
+            src:
+              song.artwork,
+            sizes:
+              "512x512",
+            type:
+              "image/png"
+          }
+
+        ]
+
+      });
+
+
+    navigator.mediaSession.setActionHandler(
+      "play",
+      function() {
+
+        musicAudio.play();
+
+      }
+    );
+
+
+    navigator.mediaSession.setActionHandler(
+      "pause",
+      function() {
+
+        musicAudio.pause();
+
+      }
+    );
+
+
+    navigator.mediaSession.setActionHandler(
+      "seekbackward",
+      function() {
+
+        musicAudio.currentTime =
+          Math.max(
+            0,
+            musicAudio.currentTime - 10
+          );
+
+      }
+    );
+
+
+    navigator.mediaSession.setActionHandler(
+      "seekforward",
+      function() {
+
+        musicAudio.currentTime =
+          Math.min(
+            musicAudio.duration || Infinity,
+            musicAudio.currentTime + 10
+          );
+
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    console.log(
+      "Media Session unavailable:",
+      error
+    );
+
+  }
+
+}
+
+
+setupMediaSession();
 
 
 // ========================================
@@ -263,11 +401,13 @@ const scrapbookPages = [
 
 ];
 
-let currentScrapbookIndex = 0;
+
+let currentScrapbookIndex =
+  0;
 
 
 // ========================================
-// CLOCK + DATE
+// CLOCK
 // ========================================
 
 function updateClock() {
@@ -410,7 +550,7 @@ setInterval(
 
 
 // ========================================
-// RANDOM HELPER
+// HELPER
 // ========================================
 
 function randomItem(array) {
@@ -425,8 +565,45 @@ function randomItem(array) {
 }
 
 
+function formatTime(seconds) {
+
+  if (
+    !Number.isFinite(seconds)
+  ) {
+
+    return "0:00";
+
+  }
+
+
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
+
+
+  const remainingSeconds =
+    Math.floor(
+      seconds % 60
+    );
+
+
+  return (
+    minutes +
+    ":" +
+    String(
+      remainingSeconds
+    ).padStart(
+      2,
+      "0"
+    )
+  );
+
+}
+
+
 // ========================================
-// LOCK SCREEN NOTIFICATIONS
+// NOTIFICATIONS
 // ========================================
 
 const eliasNotifications = [
@@ -451,15 +628,11 @@ const eliasNotifications = [
 
   "you better not be ignoring me for Mori.",
 
-  "you've been gone for suspiciously long.",
-
-  "I found another photo of us I like.",
-
-  "open the phone already.",
-
   "Marieeeee.",
 
-  "I require attention."
+  "I require attention.",
+
+  "open the phone already."
 
 ];
 
@@ -477,12 +650,6 @@ const moriNotifications = [
   "Motion detected near food bowl.",
 
   "Mori appears to be plotting something.",
-
-  "Mori is asleep. Somehow this feels suspicious.",
-
-  "Mori has entered the room.",
-
-  "Mori has ignored Elias completely.",
 
   "Possible crime detected. Suspect: Mori."
 
@@ -502,12 +669,6 @@ const calendarNotifications = [
   "Stay-home date tonight.",
 
   "Reminder: steal Elias's hoodie.",
-
-  "Tonight: do absolutely nothing together ♡",
-
-  "Possible spontaneous sushi emergency.",
-
-  "Reminder: annoy Elias lovingly.",
 
   "Photo dump night ♡"
 
@@ -540,6 +701,637 @@ loadNotifications();
 
 
 // ========================================
+// LOCK SCREEN NOW PLAYING
+// ========================================
+
+function createNowPlayingCard() {
+
+  let card =
+    document.getElementById(
+      "lockNowPlaying"
+    );
+
+
+  if (card) {
+
+    return card;
+
+  }
+
+
+  card =
+    document.createElement(
+      "div"
+    );
+
+
+  card.id =
+    "lockNowPlaying";
+
+
+  card.className =
+    "lock-now-playing hidden";
+
+
+  card.innerHTML =
+    `
+    <img
+      src="${song.artwork}"
+      class="lock-album-art"
+      alt=""
+    >
+
+    <div class="lock-song-details">
+
+      <small>
+        NOW PLAYING
+      </small>
+
+      <strong>
+        ${song.title}
+      </strong>
+
+      <span>
+        ${song.artist}
+      </span>
+
+    </div>
+
+    <button
+      id="lockPlayButton"
+      class="lock-play-button"
+      type="button"
+    >
+      ▶
+    </button>
+    `;
+
+
+  const notifications =
+    lockScreen.querySelector(
+      ".lock-notifications"
+    );
+
+
+  notifications.insertAdjacentElement(
+    "afterend",
+    card
+  );
+
+
+  card
+    .querySelector(
+      "#lockPlayButton"
+    )
+    .addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        toggleMusic();
+
+      }
+    );
+
+
+  return card;
+
+}
+
+
+function updateLockNowPlaying() {
+
+  const card =
+    createNowPlayingCard();
+
+
+  const button =
+    card.querySelector(
+      "#lockPlayButton"
+    );
+
+
+  if (
+    songHasStarted
+  ) {
+
+    card.classList.remove(
+      "hidden"
+    );
+
+  }
+
+  else {
+
+    card.classList.add(
+      "hidden"
+    );
+
+  }
+
+
+  button.textContent =
+    musicAudio.paused
+      ? "▶"
+      : "Ⅱ";
+
+}
+
+
+createNowPlayingCard();
+
+
+// ========================================
+// MUSIC CONTROLS
+// ========================================
+
+async function toggleMusic() {
+
+  if (
+    musicAudio.paused
+  ) {
+
+    try {
+
+      await musicAudio.play();
+
+      songHasStarted =
+        true;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Music could not play:",
+        error
+      );
+
+    }
+
+  }
+
+  else {
+
+    musicAudio.pause();
+
+  }
+
+
+  updateMusicUI();
+
+  updateLockNowPlaying();
+
+}
+
+
+function skipBackward() {
+
+  musicAudio.currentTime =
+    Math.max(
+      0,
+      musicAudio.currentTime - 10
+    );
+
+}
+
+
+function skipForward() {
+
+  musicAudio.currentTime =
+    Math.min(
+      musicAudio.duration || Infinity,
+      musicAudio.currentTime + 10
+    );
+
+}
+
+
+function updateMusicUI() {
+
+  const playButton =
+    document.getElementById(
+      "playButton"
+    );
+
+
+  const albumArt =
+    document.getElementById(
+      "albumArt"
+    );
+
+
+  if (playButton) {
+
+    playButton.textContent =
+      musicAudio.paused
+        ? "▶"
+        : "Ⅱ";
+
+  }
+
+
+  if (albumArt) {
+
+    albumArt.classList.toggle(
+      "playing",
+      !musicAudio.paused
+    );
+
+  }
+
+
+  const repeatButton =
+    document.getElementById(
+      "repeatButton"
+    );
+
+
+  if (repeatButton) {
+
+    repeatButton.classList.toggle(
+      "active",
+      repeatEnabled
+    );
+
+  }
+
+
+  const shuffleButton =
+    document.getElementById(
+      "shuffleButton"
+    );
+
+
+  if (shuffleButton) {
+
+    shuffleButton.classList.toggle(
+      "active",
+      shuffleEnabled
+    );
+
+  }
+
+}
+
+
+musicAudio.addEventListener(
+  "play",
+  function() {
+
+    songHasStarted =
+      true;
+
+    updateMusicUI();
+
+    updateLockNowPlaying();
+
+  }
+);
+
+
+musicAudio.addEventListener(
+  "pause",
+  function() {
+
+    updateMusicUI();
+
+    updateLockNowPlaying();
+
+  }
+);
+
+
+musicAudio.addEventListener(
+  "ended",
+  function() {
+
+    if (
+      repeatEnabled
+    ) {
+
+      musicAudio.currentTime =
+        0;
+
+
+      musicAudio.play();
+
+      return;
+
+    }
+
+
+    updateMusicUI();
+
+    updateLockNowPlaying();
+
+  }
+);
+
+
+musicAudio.addEventListener(
+  "timeupdate",
+  function() {
+
+    const progress =
+      document.getElementById(
+        "musicProgress"
+      );
+
+
+    const currentText =
+      document.getElementById(
+        "currentMusicTime"
+      );
+
+
+    const totalText =
+      document.getElementById(
+        "totalMusicTime"
+      );
+
+
+    if (
+      progress &&
+      Number.isFinite(
+        musicAudio.duration
+      ) &&
+      musicAudio.duration > 0
+    ) {
+
+      progress.value =
+        (
+          musicAudio.currentTime /
+          musicAudio.duration
+        ) * 100;
+
+    }
+
+
+    if (currentText) {
+
+      currentText.textContent =
+        formatTime(
+          musicAudio.currentTime
+        );
+
+    }
+
+
+    if (totalText) {
+
+      totalText.textContent =
+        formatTime(
+          musicAudio.duration
+        );
+
+    }
+
+  }
+);
+
+
+// ========================================
+// FAKE INCOMING CALL
+// ========================================
+
+let activeCallOverlay =
+  null;
+
+let callTimerInterval =
+  null;
+
+let callSeconds =
+  0;
+
+
+function createIncomingCall() {
+
+  if (
+    activeCallOverlay
+  ) {
+
+    return;
+
+  }
+
+
+  const overlay =
+    document.createElement(
+      "div"
+    );
+
+
+  overlay.className =
+    "incoming-call-overlay";
+
+
+  overlay.innerHTML =
+    `
+    <div class="incoming-call-content">
+
+      <p class="incoming-small">
+        INCOMING CALL
+      </p>
+
+      <div class="incoming-avatar">
+        E
+      </div>
+
+      <h2>
+        Elias ♡
+      </h2>
+
+      <p id="callStatus">
+        Elias OS Audio
+      </p>
+
+
+      <div class="incoming-call-actions">
+
+        <button
+          id="declineCall"
+          class="call-action decline"
+          type="button"
+        >
+          ✕
+          <span>
+            Decline
+          </span>
+        </button>
+
+
+        <button
+          id="acceptCall"
+          class="call-action accept"
+          type="button"
+        >
+          ☎
+          <span>
+            Accept
+          </span>
+        </button>
+
+      </div>
+
+    </div>
+    `;
+
+
+  document.body.appendChild(
+    overlay
+  );
+
+
+  activeCallOverlay =
+    overlay;
+
+
+  document
+    .getElementById(
+      "declineCall"
+    )
+    .addEventListener(
+      "click",
+      endCall
+    );
+
+
+  document
+    .getElementById(
+      "acceptCall"
+    )
+    .addEventListener(
+      "click",
+      acceptCall
+    );
+
+}
+
+
+function acceptCall() {
+
+  if (
+    !activeCallOverlay
+  ) {
+
+    return;
+
+  }
+
+
+  const status =
+    document.getElementById(
+      "callStatus"
+    );
+
+
+  const actions =
+    activeCallOverlay.querySelector(
+      ".incoming-call-actions"
+    );
+
+
+  status.textContent =
+    "0:00";
+
+
+  actions.innerHTML =
+    `
+    <button
+      id="endActiveCall"
+      class="call-action end"
+      type="button"
+    >
+      ✕
+      <span>
+        End
+      </span>
+    </button>
+    `;
+
+
+  document
+    .getElementById(
+      "endActiveCall"
+    )
+    .addEventListener(
+      "click",
+      endCall
+    );
+
+
+  callSeconds =
+    0;
+
+
+  callTimerInterval =
+    setInterval(
+      function() {
+
+        callSeconds++;
+
+
+        const minutes =
+          Math.floor(
+            callSeconds / 60
+          );
+
+
+        const seconds =
+          String(
+            callSeconds % 60
+          ).padStart(
+            2,
+            "0"
+          );
+
+
+        status.textContent =
+          `${minutes}:${seconds}`;
+
+      },
+
+      1000
+    );
+
+}
+
+
+function endCall() {
+
+  if (
+    callTimerInterval
+  ) {
+
+    clearInterval(
+      callTimerInterval
+    );
+
+
+    callTimerInterval =
+      null;
+
+  }
+
+
+  if (
+    activeCallOverlay
+  ) {
+
+    activeCallOverlay.remove();
+
+    activeCallOverlay =
+      null;
+
+  }
+
+}
+
+
+// ========================================
 // LOCK + UNLOCK
 // ========================================
 
@@ -558,6 +1350,24 @@ function unlockPhone() {
   homeScreen.classList.remove(
     "hidden"
   );
+
+
+  // Small chance Elias calls after unlocking.
+  if (
+    Math.random() < 0.12
+  ) {
+
+    setTimeout(
+      function() {
+
+        createIncomingCall();
+
+      },
+
+      1800
+    );
+
+  }
 
 }
 
@@ -586,8 +1396,9 @@ function lockPhone() {
 
   loadNotifications();
 
-
   updateClock();
+
+  updateLockNowPlaying();
 
 
   lockScreen.classList.remove(
@@ -631,13 +1442,9 @@ const eliasWidgetLines = [
 
   "You're back ♡",
 
-  "I have absolutely nothing important to say.",
-
   "Actually, wait. Come here.",
 
-  "Mori thinks this is his phone.",
-
-  "You found me again."
+  "Mori thinks this is his phone."
 
 ];
 
@@ -677,9 +1484,7 @@ const moriLines = [
 
   "committing crimes",
 
-  "demanding attention",
-
-  "ignoring Elias"
+  "demanding attention"
 
 ];
 
@@ -926,14 +1731,12 @@ function renderMessages() {
         I'm here 😭
       </button>
 
-
       <button
         class="reply-button"
         data-reply="What do you want?"
       >
         What do you want?
       </button>
-
 
       <button
         class="reply-button"
@@ -1010,13 +1813,13 @@ function sendFakeReply(text) {
   setTimeout(
     function() {
 
-      const eliasBubble =
+      const bubble =
         document.createElement(
           "div"
         );
 
 
-      eliasBubble.className =
+      bubble.className =
         "bubble elias";
 
 
@@ -1026,7 +1829,7 @@ function sendFakeReply(text) {
         )
       ) {
 
-        eliasBubble.textContent =
+        bubble.textContent =
           "Wow. Betrayal in my own phone.";
 
       }
@@ -1037,30 +1840,22 @@ function sendFakeReply(text) {
         )
       ) {
 
-        eliasBubble.textContent =
+        bubble.textContent =
           "Your attention. Obviously.";
 
       }
 
       else {
 
-        eliasBubble.textContent =
+        bubble.textContent =
           "There you are. That's better.";
 
       }
 
 
       chat.appendChild(
-        eliasBubble
+        bubble
       );
-
-
-      eliasBubble.scrollIntoView({
-
-        behavior:
-          "smooth"
-
-      });
 
     },
 
@@ -1071,7 +1866,7 @@ function sendFakeReply(text) {
 
 
 // ========================================
-// PHOTOS APP
+// PHOTOS
 // ========================================
 
 function renderPhotos() {
@@ -1080,7 +1875,7 @@ function renderPhotos() {
     "Photos";
 
 
-  let photosHTML =
+  let html =
     `
     <div class="photos-heading">
 
@@ -1107,7 +1902,7 @@ function renderPhotos() {
   photoFiles.forEach(
     function(photo) {
 
-      photosHTML +=
+      html +=
         `
         <button
           class="photo-card"
@@ -1118,7 +1913,7 @@ function renderPhotos() {
 
           <img
             src="${photo.src}"
-            alt="${photo.caption}"
+            alt=""
           >
 
         </button>
@@ -1128,14 +1923,12 @@ function renderPhotos() {
   );
 
 
-  photosHTML +=
-    `
-    </div>
-    `;
+  html +=
+    "</div>";
 
 
   appContent.innerHTML =
-    photosHTML;
+    html;
 
 
   document
@@ -1164,7 +1957,7 @@ function renderPhotos() {
 
 
 // ========================================
-// US ♡ SCRAPBOOK APP
+// SCRAPBOOK
 // ========================================
 
 function renderUs() {
@@ -1212,7 +2005,6 @@ function drawScrapbookPage() {
 
     <div class="scrapbook-viewer">
 
-
       <button
         id="scrapbookOpen"
         class="scrapbook-frame"
@@ -1228,17 +2020,14 @@ function drawScrapbookPage() {
 
 
       <div class="scrapbook-caption">
-
         ${current.title}
-
       </div>
 
 
       <div class="scrapbook-count">
 
-        Memory ${
-          currentScrapbookIndex + 1
-        }
+        Memory
+        ${currentScrapbookIndex + 1}
         of
         ${scrapbookPages.length}
 
@@ -1246,7 +2035,6 @@ function drawScrapbookPage() {
 
 
       <div class="scrapbook-controls">
-
 
         <button
           id="prevPage"
@@ -1276,7 +2064,6 @@ function drawScrapbookPage() {
           Next ›
         </button>
 
-
       </div>
 
 
@@ -1288,96 +2075,87 @@ function drawScrapbookPage() {
         Open Fullscreen ♡
       </button>
 
-
     </div>
     `;
 
 
-  const prevPage =
-    document.getElementById(
+  document
+    .getElementById(
       "prevPage"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        if (
+          currentScrapbookIndex > 0
+        ) {
+
+          currentScrapbookIndex--;
+
+          drawScrapbookPage();
+
+        }
+
+      }
     );
 
 
-  const nextPage =
-    document.getElementById(
+  document
+    .getElementById(
       "nextPage"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        if (
+          currentScrapbookIndex <
+          scrapbookPages.length - 1
+        ) {
+
+          currentScrapbookIndex++;
+
+          drawScrapbookPage();
+
+        }
+
+      }
     );
 
 
-  const scrapbookOpen =
-    document.getElementById(
+  document
+    .getElementById(
       "scrapbookOpen"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        openPhoto(
+          current.src,
+          `Our Scrapbook — ${current.title}`
+        );
+
+      }
     );
 
 
-  const openFullscreenPage =
-    document.getElementById(
+  document
+    .getElementById(
       "openFullscreenPage"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        openPhoto(
+          current.src,
+          `Our Scrapbook — ${current.title}`
+        );
+
+      }
     );
-
-
-  prevPage.addEventListener(
-    "click",
-    function() {
-
-      if (
-        currentScrapbookIndex > 0
-      ) {
-
-        currentScrapbookIndex--;
-
-        drawScrapbookPage();
-
-      }
-
-    }
-  );
-
-
-  nextPage.addEventListener(
-    "click",
-    function() {
-
-      if (
-        currentScrapbookIndex <
-        scrapbookPages.length - 1
-      ) {
-
-        currentScrapbookIndex++;
-
-        drawScrapbookPage();
-
-      }
-
-    }
-  );
-
-
-  scrapbookOpen.addEventListener(
-    "click",
-    function() {
-
-      openPhoto(
-        current.src,
-        `Our Scrapbook — ${current.title}`
-      );
-
-    }
-  );
-
-
-  openFullscreenPage.addEventListener(
-    "click",
-    function() {
-
-      openPhoto(
-        current.src,
-        `Our Scrapbook — ${current.title}`
-      );
-
-    }
-  );
 
 }
 
@@ -1413,25 +2191,6 @@ closePhoto.addEventListener(
     photoOverlay.classList.add(
       "hidden"
     );
-
-  }
-);
-
-
-photoOverlay.addEventListener(
-  "click",
-  function(event) {
-
-    if (
-      event.target ===
-      photoOverlay
-    ) {
-
-      photoOverlay.classList.add(
-        "hidden"
-      );
-
-    }
 
   }
 );
@@ -1487,24 +2246,6 @@ function renderNotes() {
       </p>
 
     </div>
-
-
-    <div class="note-card">
-
-      <small>
-        01:47
-      </small>
-
-      <h3>
-        reminder
-      </h3>
-
-      <p>
-        Tell Marie to go to sleep.
-        She will ignore this.
-      </p>
-
-    </div>
     `;
 
 }
@@ -1534,7 +2275,7 @@ function renderMori() {
       </h3>
 
       <p id="moriCamText">
-        Live status: pretending he doesn't need anybody.
+        Live status: plotting something.
       </p>
 
       <button
@@ -1557,41 +2298,24 @@ function renderMori() {
       "click",
       function() {
 
-        const text =
-          document.getElementById(
+        document
+          .getElementById(
             "moriCamText"
-          );
+          )
+          .textContent =
+          randomItem([
 
+            "Mori knocked something over. No regrets.",
 
-        const events = [
+            "Mori is asleep in the most inconvenient place possible.",
 
-          "Mori knocked something over. No regrets.",
+            "Mori has stolen Elias's seat again.",
 
-          "Mori is asleep in the most inconvenient place possible.",
+            "Mori is staring directly into the camera.",
 
-          "Mori wants food. He ate recently. This is irrelevant.",
+            "Mori is innocent. Allegedly."
 
-          "Mori is staring directly into the camera.",
-
-          "Mori has stolen Elias's seat again.",
-
-          "Mori is purring. Mission accomplished.",
-
-          "Mori has vanished. This is suspicious.",
-
-          "Mori is watching you from across the room.",
-
-          "Mori has selected violence.",
-
-          "Mori is innocent. Allegedly."
-
-        ];
-
-
-        text.textContent =
-          randomItem(
-            events
-          );
+          ]);
 
       }
     );
@@ -1623,7 +2347,6 @@ function renderCalendar() {
 
       <p>
         Elias claims you choose the movie.
-        Elias will complain about the movie.
       </p>
 
     </div>
@@ -1639,11 +2362,6 @@ function renderCalendar() {
         Sushi Date 🍣
       </strong>
 
-      <p>
-        Sit beside Elias, apparently.
-        Sitting opposite him has been forbidden.
-      </p>
-
     </div>
 
 
@@ -1657,10 +2375,6 @@ function renderCalendar() {
         Give Mori attention
       </strong>
 
-      <p>
-        This event repeats approximately every eleven minutes.
-      </p>
-
     </div>
     `;
 
@@ -1668,7 +2382,7 @@ function renderCalendar() {
 
 
 // ========================================
-// MUSIC - REAL AUDIO
+// MUSIC APP
 // ========================================
 
 function renderMusic() {
@@ -1677,50 +2391,30 @@ function renderMusic() {
     "Music";
 
 
-  if (
-    currentAudio
-  ) {
-
-    currentAudio.pause();
-
-    currentAudio =
-      null;
-
-  }
-
-
   appContent.innerHTML =
     `
     <div class="music-player">
 
 
-      <div
+      <img
         id="albumArt"
-        class="album-art"
+        class="real-album-art"
+        src="${song.artwork}"
+        alt="${song.title}"
       >
-        ♡
-      </div>
 
 
       <h3>
-        Our Song
+        ${song.title}
       </h3>
 
 
       <p>
-        Marie × Elias
+        ${song.artist}
       </p>
 
 
-      <audio
-        id="ourSongAudio"
-        src="our song.mp3"
-        preload="metadata"
-      ></audio>
-
-
       <div class="music-progress-wrap">
-
 
         <input
           id="musicProgress"
@@ -1735,46 +2429,127 @@ function renderMusic() {
         <div class="music-time">
 
           <span id="currentMusicTime">
-            0:00
+            ${formatTime(
+              musicAudio.currentTime
+            )}
           </span>
 
           <span id="totalMusicTime">
-            0:00
+            ${formatTime(
+              musicAudio.duration
+            )}
           </span>
 
         </div>
+
+      </div>
+
+
+      <div class="main-music-controls">
+
+
+        <button
+          id="backButton"
+          class="secondary-music-button"
+          type="button"
+        >
+          ↶
+          <small>
+            10
+          </small>
+        </button>
+
+
+        <button
+          id="playButton"
+          class="play-button"
+          type="button"
+        >
+          ${
+            musicAudio.paused
+              ? "▶"
+              : "Ⅱ"
+          }
+        </button>
+
+
+        <button
+          id="forwardButton"
+          class="secondary-music-button"
+          type="button"
+        >
+          ↷
+          <small>
+            10
+          </small>
+        </button>
 
 
       </div>
 
 
-      <button
-        id="playButton"
-        class="play-button"
-        type="button"
-      >
-        ▶
-      </button>
+      <div class="music-extra-controls">
+
+
+        <button
+          id="shuffleButton"
+          class="music-option-button ${
+            shuffleEnabled
+              ? "active"
+              : ""
+          }"
+          type="button"
+        >
+          🔀
+        </button>
+
+
+        <button
+          id="repeatButton"
+          class="music-option-button ${
+            repeatEnabled
+              ? "active"
+              : ""
+          }"
+          type="button"
+        >
+          🔁
+        </button>
+
+
+      </div>
+
+
+      <div class="volume-wrap">
+
+        <span>
+          🔈
+        </span>
+
+        <input
+          id="volumeSlider"
+          class="volume-slider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="${musicAudio.volume}"
+        >
+
+        <span>
+          🔊
+        </span>
+
+      </div>
+
+
+      <p class="music-little-note">
+        Our little soundtrack ♡
+      </p>
 
 
     </div>
     `;
-
-
-  const audio =
-    document.getElementById(
-      "ourSongAudio"
-    );
-
-
-  currentAudio =
-    audio;
-
-
-  const playButton =
-    document.getElementById(
-      "playButton"
-    );
 
 
   const progress =
@@ -1783,171 +2558,20 @@ function renderMusic() {
     );
 
 
-  const currentTimeText =
-    document.getElementById(
-      "currentMusicTime"
-    );
-
-
-  const totalTimeText =
-    document.getElementById(
-      "totalMusicTime"
-    );
-
-
-  const albumArt =
-    document.getElementById(
-      "albumArt"
-    );
-
-
-  function formatTime(
-    seconds
+  if (
+    Number.isFinite(
+      musicAudio.duration
+    ) &&
+    musicAudio.duration > 0
   ) {
 
-    if (
-      !Number.isFinite(
-        seconds
-      )
-    ) {
-
-      return "0:00";
-
-    }
-
-
-    const minutes =
-      Math.floor(
-        seconds / 60
-      );
-
-
-    const remainingSeconds =
-      Math.floor(
-        seconds % 60
-      );
-
-
-    return (
-      minutes +
-      ":" +
-      String(
-        remainingSeconds
-      ).padStart(
-        2,
-        "0"
-      )
-    );
+    progress.value =
+      (
+        musicAudio.currentTime /
+        musicAudio.duration
+      ) * 100;
 
   }
-
-
-  playButton.addEventListener(
-    "click",
-    async function() {
-
-      if (
-        audio.paused
-      ) {
-
-        try {
-
-          await audio.play();
-
-
-          playButton.textContent =
-            "Ⅱ";
-
-
-          albumArt.classList.add(
-            "playing"
-          );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Audio could not play:",
-            error
-          );
-
-        }
-
-      }
-
-      else {
-
-        audio.pause();
-
-
-        playButton.textContent =
-          "▶";
-
-
-        albumArt.classList.remove(
-          "playing"
-        );
-
-      }
-
-    }
-  );
-
-
-  audio.addEventListener(
-    "loadedmetadata",
-    function() {
-
-      totalTimeText.textContent =
-        formatTime(
-          audio.duration
-        );
-
-    }
-  );
-
-
-  audio.addEventListener(
-    "durationchange",
-    function() {
-
-      totalTimeText.textContent =
-        formatTime(
-          audio.duration
-        );
-
-    }
-  );
-
-
-  audio.addEventListener(
-    "timeupdate",
-    function() {
-
-      if (
-        Number.isFinite(
-          audio.duration
-        ) &&
-        audio.duration > 0
-      ) {
-
-        progress.value =
-          (
-            audio.currentTime /
-            audio.duration
-          ) * 100;
-
-      }
-
-
-      currentTimeText.textContent =
-        formatTime(
-          audio.currentTime
-        );
-
-    }
-  );
 
 
   progress.addEventListener(
@@ -1956,19 +2580,19 @@ function renderMusic() {
 
       if (
         Number.isFinite(
-          audio.duration
+          musicAudio.duration
         ) &&
-        audio.duration > 0
+        musicAudio.duration > 0
       ) {
 
-        audio.currentTime =
+        musicAudio.currentTime =
           (
             Number(
               progress.value
             ) /
             100
           ) *
-          audio.duration;
+          musicAudio.duration;
 
       }
 
@@ -1976,52 +2600,94 @@ function renderMusic() {
   );
 
 
-  audio.addEventListener(
-    "ended",
-    function() {
-
-      playButton.textContent =
-        "▶";
-
-
-      progress.value =
-        0;
+  document
+    .getElementById(
+      "playButton"
+    )
+    .addEventListener(
+      "click",
+      toggleMusic
+    );
 
 
-      currentTimeText.textContent =
-        "0:00";
+  document
+    .getElementById(
+      "backButton"
+    )
+    .addEventListener(
+      "click",
+      skipBackward
+    );
 
 
-      albumArt.classList.remove(
-        "playing"
-      );
-
-    }
-  );
-
-
-  audio.addEventListener(
-    "error",
-    function() {
-
-      totalTimeText.textContent =
-        "File error";
+  document
+    .getElementById(
+      "forwardButton"
+    )
+    .addEventListener(
+      "click",
+      skipForward
+    );
 
 
-      playButton.textContent =
-        "×";
+  document
+    .getElementById(
+      "repeatButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        repeatEnabled =
+          !repeatEnabled;
 
 
-      playButton.disabled =
-        true;
+        musicAudio.loop =
+          repeatEnabled;
 
 
-      console.error(
-        'Could not load "our song.mp3". Check the exact GitHub filename.'
-      );
+        updateMusicUI();
 
-    }
-  );
+      }
+    );
+
+
+  document
+    .getElementById(
+      "shuffleButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        shuffleEnabled =
+          !shuffleEnabled;
+
+
+        updateMusicUI();
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "volumeSlider"
+    )
+    .addEventListener(
+      "input",
+      function(event) {
+
+        musicAudio.volume =
+          Number(
+            event.target.value
+          );
+
+      }
+    );
+
+
+  updateMusicUI();
 
 }
 
@@ -2058,7 +2724,7 @@ function renderSettings() {
       </small>
 
       <strong>
-        1.3
+        1.4
       </strong>
 
     </div>
@@ -2067,11 +2733,11 @@ function renderSettings() {
     <div class="info-card">
 
       <small>
-        OWNER
+        MUSIC
       </small>
 
       <strong>
-        Marie ♡
+        ${song.title}
       </strong>
 
     </div>
@@ -2103,43 +2769,13 @@ function renderSettings() {
     </div>
 
 
-    <div class="info-card">
-
-      <small>
-        MUSIC
-      </small>
-
-      <strong>
-        our song.mp3
-      </strong>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <small>
-        MORI ACCESS
-      </small>
-
-      <strong>
-        unfortunately unlimited
-      </strong>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <small>
-        API COST
-      </small>
-
-      <strong>
-        €0.00 😌
-      </strong>
-
-    </div>
+    <button
+      id="testCallButton"
+      class="lock-button"
+      type="button"
+    >
+      ☎ Incoming Call from Elias
+    </button>
 
 
     <button
@@ -2150,6 +2786,16 @@ function renderSettings() {
       Lock Elias OS
     </button>
     `;
+
+
+  document
+    .getElementById(
+      "testCallButton"
+    )
+    .addEventListener(
+      "click",
+      createIncomingCall
+    );
 
 
   document
@@ -2171,3 +2817,5 @@ function renderSettings() {
 updateClock();
 
 loadNotifications();
+
+updateLockNowPlaying();
