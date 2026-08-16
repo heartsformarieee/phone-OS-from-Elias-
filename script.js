@@ -1,7 +1,7 @@
 // ========================================
-// ELIAS OS 1.2
+// ELIAS OS 1.3
 // LOCK SCREEN + NOTIFICATIONS
-// PHOTOS + US SCRAPBOOK
+// PHOTOS + SCRAPBOOK + REAL MUSIC
 // ========================================
 
 
@@ -92,6 +92,13 @@ const bigPhotoCaption =
 
 const closePhoto =
   document.getElementById("closePhoto");
+
+
+// ========================================
+// AUDIO STATE
+// ========================================
+
+let currentAudio = null;
 
 
 // ========================================
@@ -1320,7 +1327,6 @@ function drawScrapbookPage() {
 
         currentScrapbookIndex--;
 
-
         drawScrapbookPage();
 
       }
@@ -1339,7 +1345,6 @@ function drawScrapbookPage() {
       ) {
 
         currentScrapbookIndex++;
-
 
         drawScrapbookPage();
 
@@ -1663,7 +1668,7 @@ function renderCalendar() {
 
 
 // ========================================
-// MUSIC
+// MUSIC - REAL AUDIO
 // ========================================
 
 function renderMusic() {
@@ -1672,21 +1677,76 @@ function renderMusic() {
     "Music";
 
 
+  if (
+    currentAudio
+  ) {
+
+    currentAudio.pause();
+
+    currentAudio =
+      null;
+
+  }
+
+
   appContent.innerHTML =
     `
     <div class="music-player">
 
-      <div class="album-art">
+
+      <div
+        id="albumArt"
+        class="album-art"
+      >
         ♡
       </div>
+
 
       <h3>
         Our Song
       </h3>
 
+
       <p>
         Marie × Elias
       </p>
+
+
+      <audio
+        id="ourSongAudio"
+        src="our song.mp3"
+        preload="metadata"
+      ></audio>
+
+
+      <div class="music-progress-wrap">
+
+
+        <input
+          id="musicProgress"
+          class="music-progress"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+        >
+
+
+        <div class="music-time">
+
+          <span id="currentMusicTime">
+            0:00
+          </span>
+
+          <span id="totalMusicTime">
+            0:00
+          </span>
+
+        </div>
+
+
+      </div>
+
 
       <button
         id="playButton"
@@ -1696,32 +1756,269 @@ function renderMusic() {
         ▶
       </button>
 
+
     </div>
     `;
 
 
-  const button =
+  const audio =
+    document.getElementById(
+      "ourSongAudio"
+    );
+
+
+  currentAudio =
+    audio;
+
+
+  const playButton =
     document.getElementById(
       "playButton"
     );
 
 
-  let playing =
-    false;
+  const progress =
+    document.getElementById(
+      "musicProgress"
+    );
 
 
-  button.addEventListener(
+  const currentTimeText =
+    document.getElementById(
+      "currentMusicTime"
+    );
+
+
+  const totalTimeText =
+    document.getElementById(
+      "totalMusicTime"
+    );
+
+
+  const albumArt =
+    document.getElementById(
+      "albumArt"
+    );
+
+
+  function formatTime(
+    seconds
+  ) {
+
+    if (
+      !Number.isFinite(
+        seconds
+      )
+    ) {
+
+      return "0:00";
+
+    }
+
+
+    const minutes =
+      Math.floor(
+        seconds / 60
+      );
+
+
+    const remainingSeconds =
+      Math.floor(
+        seconds % 60
+      );
+
+
+    return (
+      minutes +
+      ":" +
+      String(
+        remainingSeconds
+      ).padStart(
+        2,
+        "0"
+      )
+    );
+
+  }
+
+
+  playButton.addEventListener(
     "click",
+    async function() {
+
+      if (
+        audio.paused
+      ) {
+
+        try {
+
+          await audio.play();
+
+
+          playButton.textContent =
+            "Ⅱ";
+
+
+          albumArt.classList.add(
+            "playing"
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Audio could not play:",
+            error
+          );
+
+        }
+
+      }
+
+      else {
+
+        audio.pause();
+
+
+        playButton.textContent =
+          "▶";
+
+
+        albumArt.classList.remove(
+          "playing"
+        );
+
+      }
+
+    }
+  );
+
+
+  audio.addEventListener(
+    "loadedmetadata",
     function() {
 
-      playing =
-        !playing;
+      totalTimeText.textContent =
+        formatTime(
+          audio.duration
+        );
+
+    }
+  );
 
 
-      button.textContent =
-        playing
-          ? "Ⅱ"
-          : "▶";
+  audio.addEventListener(
+    "durationchange",
+    function() {
+
+      totalTimeText.textContent =
+        formatTime(
+          audio.duration
+        );
+
+    }
+  );
+
+
+  audio.addEventListener(
+    "timeupdate",
+    function() {
+
+      if (
+        Number.isFinite(
+          audio.duration
+        ) &&
+        audio.duration > 0
+      ) {
+
+        progress.value =
+          (
+            audio.currentTime /
+            audio.duration
+          ) * 100;
+
+      }
+
+
+      currentTimeText.textContent =
+        formatTime(
+          audio.currentTime
+        );
+
+    }
+  );
+
+
+  progress.addEventListener(
+    "input",
+    function() {
+
+      if (
+        Number.isFinite(
+          audio.duration
+        ) &&
+        audio.duration > 0
+      ) {
+
+        audio.currentTime =
+          (
+            Number(
+              progress.value
+            ) /
+            100
+          ) *
+          audio.duration;
+
+      }
+
+    }
+  );
+
+
+  audio.addEventListener(
+    "ended",
+    function() {
+
+      playButton.textContent =
+        "▶";
+
+
+      progress.value =
+        0;
+
+
+      currentTimeText.textContent =
+        "0:00";
+
+
+      albumArt.classList.remove(
+        "playing"
+      );
+
+    }
+  );
+
+
+  audio.addEventListener(
+    "error",
+    function() {
+
+      totalTimeText.textContent =
+        "File error";
+
+
+      playButton.textContent =
+        "×";
+
+
+      playButton.disabled =
+        true;
+
+
+      console.error(
+        'Could not load "our song.mp3". Check the exact GitHub filename.'
+      );
 
     }
   );
@@ -1761,7 +2058,7 @@ function renderSettings() {
       </small>
 
       <strong>
-        1.2
+        1.3
       </strong>
 
     </div>
@@ -1801,6 +2098,19 @@ function renderSettings() {
 
       <strong>
         ${scrapbookPages.length} memories
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        MUSIC
+      </small>
+
+      <strong>
+        our song.mp3
       </strong>
 
     </div>
