@@ -34,12 +34,118 @@
     </div>
 
 
+    <!-- LOCK SCREEN -->
+
+    <section
+      id="lockScreen"
+      class="lock-screen"
+    >
+
+      <div class="lock-top">
+
+        <p id="lockDate">
+          Sunday, August 16
+        </p>
+
+        <h1 id="lockTime">
+          11:42
+        </h1>
+
+      </div>
+
+
+      <div class="lock-notifications">
+
+        <div class="notification-card">
+
+          <div class="notification-icon">
+            E
+          </div>
+
+          <div class="notification-text">
+
+            <div class="notification-header">
+              <strong>Elias</strong>
+              <span>now</span>
+            </div>
+
+            <p id="eliasNotification">
+              come here.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="notification-card">
+
+          <div class="notification-icon mori-notification">
+            🐈‍⬛
+          </div>
+
+          <div class="notification-text">
+
+            <div class="notification-header">
+              <strong>Mori Cam</strong>
+              <span>2m ago</span>
+            </div>
+
+            <p id="moriNotification">
+              Motion detected in kitchen.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="notification-card">
+
+          <div class="notification-icon calendar-notification">
+            📅
+          </div>
+
+          <div class="notification-text">
+
+            <div class="notification-header">
+              <strong>Calendar</strong>
+              <span>5m ago</span>
+            </div>
+
+            <p id="calendarNotification">
+              Sushi date tonight ♡
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="unlock-area">
+
+        <div class="unlock-line"></div>
+
+        <p>
+          Tap anywhere to unlock
+        </p>
+
+      </div>
+
+    </section>
+
+
     <!-- STATUS BAR -->
 
-    <header class="status-bar">
+    <header
+      id="statusBar"
+      class="status-bar hidden"
+    >
 
       <span id="statusTime">
-        11:23
+        11:42
       </span>
 
       <div class="status-icons">
@@ -55,11 +161,9 @@
 
     <section
       id="homeScreen"
-      class="home-screen"
+      class="home-screen hidden"
     >
 
-
-      <!-- TITLE -->
 
       <div class="home-heading">
 
@@ -68,13 +172,13 @@
         </p>
 
         <h1 id="homeGreeting">
-          Morning, Marie.
+          Hey, Marie.
         </h1>
 
       </div>
 
 
-      <!-- LARGE ELIAS WIDGET -->
+      <!-- ELIAS WIDGET -->
 
       <button
         id="eliasWidget"
@@ -166,14 +270,12 @@
 
         </div>
 
-
       </div>
 
 
       <!-- APPS -->
 
       <section class="apps-grid">
-
 
         <button
           class="app-icon-button"
@@ -329,7 +431,6 @@
 
         </button>
 
-
       </section>
 
 
@@ -371,13 +472,10 @@
 
       </div>
 
-
     </section>
 
 
-    <!-- =========================
-         APP WINDOW
-    ========================== -->
+    <!-- APP WINDOW -->
 
     <section
       id="appWindow"
@@ -411,9 +509,7 @@
     </section>
 
 
-    <!-- =========================
-         PHOTO VIEWER
-    ========================== -->
+    <!-- PHOTO VIEWER -->
 
     <div
       id="photoOverlay"
