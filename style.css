@@ -1501,3 +1501,69 @@ button.small-widget {
 .hidden {
   display: none !important;
 }
+
+.photos-meta,
+.scrapbook-meta {
+  margin: -4px 0 16px;
+  color: #b78a9a;
+  font-size: 11px;
+}
+
+.scrapbook-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.scrapbook-frame {
+  border: none;
+  padding: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+}
+
+.scrapbook-frame img {
+  width: 100%;
+  display: block;
+  border-radius: 22px;
+  object-fit: cover;
+}
+
+.scrapbook-caption {
+  text-align: center;
+  color: #f1dce4;
+  font-family: Georgia, serif;
+  font-size: 20px;
+}
+
+.scrapbook-count {
+  text-align: center;
+  color: #b68a99;
+  font-size: 12px;
+}
+
+.scrapbook-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.scrapbook-button,
+.scrapbook-open-button {
+  min-height: 48px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  color: white;
+  font-weight: 600;
+}
+
+.scrapbook-button:disabled {
+  opacity: 0.4;
+}
+
+.scrapbook-open-button {
+  background: #d8849f;
+  color: #241119;
+}
