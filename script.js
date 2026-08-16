@@ -1,419 +1,334 @@
 // ========================================
-// OUR LITTLE WORLD 1.0
+// ELIAS OS 1.0
 // ========================================
 
 
+// ========================================
 // ELEMENTS
+// ========================================
 
-const heartCount =
+const statusTime =
   document.getElementById(
-    "heartCount"
+    "statusTime"
   );
 
-const heroDialogue =
+const homeGreeting =
   document.getElementById(
-    "heroDialogue"
+    "homeGreeting"
   );
 
-const memoriesList =
+const weekdayText =
   document.getElementById(
-    "memoriesList"
+    "weekdayText"
   );
 
-const memoryCount =
+const dayNumber =
   document.getElementById(
-    "memoryCount"
+    "dayNumber"
   );
 
-const randomEventButton =
+const monthText =
   document.getElementById(
-    "randomEventButton"
+    "monthText"
   );
 
-const petMoriButton =
+const calendarIconDay =
   document.getElementById(
-    "petMoriButton"
+    "calendarIconDay"
   );
 
-const moriText =
+const calendarIconNumber =
   document.getElementById(
-    "moriText"
+    "calendarIconNumber"
   );
 
-const resetButton =
+const eliasWidget =
   document.getElementById(
-    "resetButton"
+    "eliasWidget"
+  );
+
+const eliasWidgetText =
+  document.getElementById(
+    "eliasWidgetText"
+  );
+
+const moriWidget =
+  document.getElementById(
+    "moriWidget"
+  );
+
+const moriWidgetText =
+  document.getElementById(
+    "moriWidgetText"
+  );
+
+const messageBadge =
+  document.getElementById(
+    "messageBadge"
+  );
+
+const homeScreen =
+  document.getElementById(
+    "homeScreen"
+  );
+
+const appWindow =
+  document.getElementById(
+    "appWindow"
+  );
+
+const appTitle =
+  document.getElementById(
+    "appTitle"
+  );
+
+const appContent =
+  document.getElementById(
+    "appContent"
+  );
+
+const closeApp =
+  document.getElementById(
+    "closeApp"
+  );
+
+const photoOverlay =
+  document.getElementById(
+    "photoOverlay"
+  );
+
+const bigPhoto =
+  document.getElementById(
+    "bigPhoto"
+  );
+
+const bigPhotoCaption =
+  document.getElementById(
+    "bigPhotoCaption"
+  );
+
+const closePhoto =
+  document.getElementById(
+    "closePhoto"
   );
 
 
-// SAVE DATA
+// ========================================
+// CLOCK + DATE
+// ========================================
 
-let hearts =
-  Number(
-    localStorage.getItem(
-      "littleWorldHearts"
-    )
-  ) || 0;
+function updateClock() {
 
+  const now =
+    new Date();
 
-let memories =
-  JSON.parse(
-    localStorage.getItem(
-      "littleWorldMemories"
-    ) || "[]"
-  );
 
-
-heartCount.textContent =
-  hearts;
-
-
-// DATE DATA
-
-const dates = {
-
-  sushi: {
-    dialogue:
-      "Sushi? Sit next to me. I'm not negotiating.",
-
-    hearts:
-      3,
-
-    memory: {
-      icon:
-        "🍣",
-
-      text:
-        "Sushi date — Elias insisted you sit beside him instead of across from him."
-    }
-  },
-
-
-  movie: {
-    dialogue:
-      "You pick the movie. I'm stealing half the blanket.",
-
-    hearts:
-      2,
-
-    memory: {
-      icon:
-        "🎬",
-
-      text:
-        "Movie night — neither of you paid attention to the last twenty minutes."
-    }
-  },
-
-
-  walk: {
-    dialogue:
-      "Night walk? Come here. Your hand's freezing.",
-
-    hearts:
-      4,
-
-    memory: {
-      icon:
-        "🌙",
-
-      text:
-        "Late-night walk — Elias held your hand the entire way home."
-    }
-  },
-
-
-  home: {
-    dialogue:
-      "Staying home sounds perfect. Unless Mori steals you again.",
-
-    hearts:
-      2,
-
-    memory: {
-      icon:
-        "🐈‍⬛",
-
-      text:
-        "Stayed home — Mori somehow ended up between the two of you."
-    }
-  }
-
-};
-
-
-// RANDOM EVENTS
-
-const randomEvents = [
-
-  {
-    text:
-      "Mori climbs onto your lap. Elias looks personally betrayed.",
-
-    hearts:
-      1
-  },
-
-
-  {
-    text:
-      "Elias quietly rests his head against yours.",
-
-    hearts:
-      3
-  },
-
-
-  {
-    text:
-      "You catch Elias staring. He immediately goes, “What?”",
-
-    hearts:
-      2
-  },
-
-
-  {
-    text:
-      "Elias steals your phone and takes the worst selfie imaginable.",
-
-    hearts:
-      2
-  },
-
-
-  {
-    text:
-      "You fall asleep beside Elias. He stays completely still so he doesn't wake you.",
-
-    hearts:
-      5
-  },
-
-
-  {
-    text:
-      "Mori knocks something over. Neither of you gets up.",
-
-    hearts:
-      1
-  },
-
-
-  {
-    text:
-      "Elias looks at you for a second and quietly says, “Come here.”",
-
-    hearts:
-      4
-  },
-
-
-  {
-    text:
-      "You steal Elias's hoodie. He notices immediately and decides not to ask for it back.",
-
-    hearts:
-      3
-  },
-
-
-  {
-    text:
-      "Elias kisses your forehead and then acts like absolutely nothing happened.",
-
-    hearts:
-      4
-  }
-
-];
-
-
-// MORI EVENTS
-
-const moriEvents = [
-
-  "Mori purrs immediately. Elias looks offended that it was apparently that easy.",
-
-  "Mori headbutts your hand for more attention.",
-
-  "Mori flops dramatically onto his side.",
-
-  "Mori stares at Elias while you pet him. Elias: “Don't start.”",
-
-  "Mori has decided your lap belongs to him now."
-
-];
-
-
-// SAVE
-
-function saveData() {
-
-  localStorage.setItem(
-    "littleWorldHearts",
-    hearts
-  );
-
-
-  localStorage.setItem(
-    "littleWorldMemories",
-    JSON.stringify(
-      memories
-    )
-  );
-
-}
-
-
-// HEARTS
-
-function addHearts(
-  amount
-) {
-
-  hearts +=
-    amount;
-
-
-  heartCount.textContent =
-    hearts;
-
-
-  saveData();
-
-}
-
-
-// DIALOGUE
-
-function setDialogue(
-  text
-) {
-
-  heroDialogue.style.opacity =
-    "0";
-
-
-  setTimeout(
-    function() {
-
-      heroDialogue.innerHTML =
-        text;
-
-      heroDialogue.style.opacity =
-        "1";
-
-    },
-    120
-  );
-
-}
-
-
-// MEMORIES
-
-function unlockMemory(
-  memory
-) {
-
-  const exists =
-    memories.some(
-      item =>
-        item.text ===
-        memory.text
-    );
-
-
-  if (!exists) {
-
-    memories.push(
-      memory
-    );
-
-
-    saveData();
-
-    renderMemories();
-
-  }
-
-}
-
-
-function renderMemories() {
-
-  memoriesList.innerHTML =
-    "";
-
-
-  memoryCount.textContent =
-    `${memories.length} unlocked`;
-
-
-  if (
-    memories.length === 0
-  ) {
-
-    memoriesList.innerHTML =
-      `
-      <div class="empty">
-        Your memories will appear here ♡
-      </div>
-      `;
-
-    return;
-
-  }
-
-
-  memories
-    .slice()
-    .reverse()
-    .forEach(
-      function(memory) {
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-
-        item.className =
-          "memory";
-
-
-        item.innerHTML =
-          `
-          <div class="memory-icon">
-            ${memory.icon}
-          </div>
-
-          <div class="memory-text">
-            ${memory.text}
-          </div>
-
-          <div class="memory-heart">
-            ♡
-          </div>
-          `;
-
-
-        memoriesList.appendChild(
-          item
-        );
-
+  statusTime.textContent =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour: "2-digit",
+        minute: "2-digit"
       }
     );
 
+
+  const hour =
+    now.getHours();
+
+
+  if (hour < 5) {
+
+    homeGreeting.textContent =
+      "Still awake, Marie?";
+
+  }
+
+  else if (hour < 12) {
+
+    homeGreeting.textContent =
+      "Morning, Marie.";
+
+  }
+
+  else if (hour < 18) {
+
+    homeGreeting.textContent =
+      "Hey, Marie.";
+
+  }
+
+  else {
+
+    homeGreeting.textContent =
+      "Evening, Marie.";
+
+  }
+
+
+  const weekdays =
+    [
+      "SUNDAY",
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY"
+    ];
+
+
+  const months =
+    [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+
+
+  weekdayText.textContent =
+    weekdays[
+      now.getDay()
+    ];
+
+
+  calendarIconDay.textContent =
+    weekdays[
+      now.getDay()
+    ].slice(
+      0,
+      3
+    );
+
+
+  dayNumber.textContent =
+    now.getDate();
+
+
+  calendarIconNumber.textContent =
+    now.getDate();
+
+
+  monthText.textContent =
+    months[
+      now.getMonth()
+    ];
+
 }
 
 
-// DATE BUTTONS
+updateClock();
+
+setInterval(
+  updateClock,
+  30000
+);
+
+
+// ========================================
+// ELIAS WIDGET
+// ========================================
+
+const eliasWidgetLines = [
+
+  "There you are.",
+
+  "Come here.",
+
+  "You checking on me again?",
+
+  "Mori stole my spot. Again.",
+
+  "You look suspiciously cute today.",
+
+  "I was wondering when you'd open this.",
+
+  "Don't just stare at the widget.",
+
+  "Okay, fine. I missed you.",
+
+  "We should get sushi.",
+
+  "Stay for a while."
+
+];
+
+
+eliasWidget.addEventListener(
+  "click",
+  function() {
+
+    const line =
+      eliasWidgetLines[
+        Math.floor(
+          Math.random() *
+          eliasWidgetLines.length
+        )
+      ];
+
+
+    eliasWidgetText.textContent =
+      line;
+
+  }
+);
+
+
+// ========================================
+// MORI WIDGET
+// ========================================
+
+const moriLines = [
+
+  "judging you",
+
+  "sleeping",
+
+  "plotting something",
+
+  "wants food",
+
+  "stole Elias's seat",
+
+  "pretending not to care",
+
+  "watching everything"
+
+];
+
+
+moriWidget.addEventListener(
+  "click",
+  function() {
+
+    moriWidgetText.textContent =
+      moriLines[
+        Math.floor(
+          Math.random() *
+          moriLines.length
+        )
+      ];
+
+  }
+);
+
+
+// ========================================
+// APP OPENING
+// ========================================
 
 document
   .querySelectorAll(
-    "[data-date]"
+    "[data-app]"
   )
   .forEach(
     function(button) {
@@ -422,28 +337,8 @@ document
         "click",
         function() {
 
-          const dateName =
-            button.dataset.date;
-
-
-          const date =
-            dates[
-              dateName
-            ];
-
-
-          setDialogue(
-            date.dialogue
-          );
-
-
-          addHearts(
-            date.hearts
-          );
-
-
-          unlockMemory(
-            date.memory
+          openApp(
+            button.dataset.app
           );
 
         }
@@ -453,367 +348,939 @@ document
   );
 
 
-// RANDOM EVENT
+function openApp(
+  app
+) {
 
-randomEventButton
-  .addEventListener(
-    "click",
-    function() {
-
-      const event =
-        randomEvents[
-          Math.floor(
-            Math.random() *
-            randomEvents.length
-          )
-        ];
-
-
-      setDialogue(
-        event.text
-      );
-
-
-      addHearts(
-        event.hearts
-      );
-
-    }
-  );
-
-
-// MORI
-
-petMoriButton
-  .addEventListener(
-    "click",
-    function() {
-
-      const event =
-        moriEvents[
-          Math.floor(
-            Math.random() *
-            moriEvents.length
-          )
-        ];
-
-
-      moriText.textContent =
-        event;
-
-
-      addHearts(
-        1
-      );
-
-    }
-  );
-
-
-// PAGE NAVIGATION
-
-const navButtons =
-  document.querySelectorAll(
-    ".nav-button"
-  );
-
-
-const homeSections = [
-
-  document.querySelector(
-    ".hero"
-  ),
-
-  document.querySelector(
-    ".section"
-  ),
-
-  document.querySelector(
-    ".memory-area"
-  )
-
-];
-
-
-const moriPage =
-  document.getElementById(
-    "moriPage"
-  );
-
-const albumPage =
-  document.getElementById(
-    "albumPage"
-  );
-
-const settingsPage =
-  document.getElementById(
-    "settingsPage"
-  );
-
-
-function hidePages() {
-
-  moriPage.classList.add(
+  homeScreen.classList.add(
     "hidden"
   );
 
-  albumPage.classList.add(
+
+  appWindow.classList.remove(
     "hidden"
   );
 
-  settingsPage.classList.add(
-    "hidden"
+
+  appContent.innerHTML =
+    "";
+
+
+  if (
+    app ===
+    "messages"
+  ) {
+
+    renderMessages();
+
+  }
+
+
+  if (
+    app ===
+    "photos"
+  ) {
+
+    renderPhotos();
+
+  }
+
+
+  if (
+    app ===
+    "notes"
+  ) {
+
+    renderNotes();
+
+  }
+
+
+  if (
+    app ===
+    "mori"
+  ) {
+
+    renderMori();
+
+  }
+
+
+  if (
+    app ===
+    "calendar"
+  ) {
+
+    renderCalendar();
+
+  }
+
+
+  if (
+    app ===
+    "music"
+  ) {
+
+    renderMusic();
+
+  }
+
+
+  if (
+    app ===
+    "favorites"
+  ) {
+
+    renderUs();
+
+  }
+
+
+  if (
+    app ===
+    "settings"
+  ) {
+
+    renderSettings();
+
+  }
+
+
+  window.scrollTo(
+    0,
+    0
   );
 
 }
 
 
-function showHome() {
+// ========================================
+// CLOSE APP
+// ========================================
 
-  homeSections.forEach(
-    function(section) {
+closeApp.addEventListener(
+  "click",
+  function() {
 
-      section.classList.remove(
-        "hidden"
-      );
-
-    }
-  );
-
-
-  hidePages();
-
-}
+    appWindow.classList.add(
+      "hidden"
+    );
 
 
-function hideHome() {
-
-  homeSections.forEach(
-    function(section) {
-
-      section.classList.add(
-        "hidden"
-      );
-
-    }
-  );
-
-}
+    homeScreen.classList.remove(
+      "hidden"
+    );
 
 
-navButtons.forEach(
-  function(button) {
-
-    button.addEventListener(
-      "click",
-      function() {
-
-        navButtons.forEach(
-          item =>
-            item.classList.remove(
-              "active"
-            )
-        );
-
-
-        button.classList.add(
-          "active"
-        );
-
-
-        const page =
-          button.dataset.page;
-
-
-        if (
-          page === "home"
-        ) {
-
-          showHome();
-
-        }
-
-
-        else if (
-          page ===
-          "memories"
-        ) {
-
-          showHome();
-
-
-          setTimeout(
-            function() {
-
-              document
-                .querySelector(
-                  ".memory-area"
-                )
-                .scrollIntoView({
-                  behavior:
-                    "smooth"
-                });
-
-            },
-            100
-          );
-
-        }
-
-
-        else {
-
-          hideHome();
-
-          hidePages();
-
-
-          if (
-            page ===
-            "mori"
-          ) {
-
-            moriPage.classList.remove(
-              "hidden"
-            );
-
-          }
-
-
-          if (
-            page ===
-            "album"
-          ) {
-
-            albumPage.classList.remove(
-              "hidden"
-            );
-
-          }
-
-
-          if (
-            page ===
-            "settings"
-          ) {
-
-            settingsPage.classList.remove(
-              "hidden"
-            );
-
-          }
-
-        }
-
-      }
+    window.scrollTo(
+      0,
+      0
     );
 
   }
 );
 
 
-// RESET
+// ========================================
+// MESSAGES
+// ========================================
 
-resetButton
-  .addEventListener(
-    "click",
-    function() {
+function renderMessages() {
 
-      const confirmed =
-        confirm(
-          "Reset all hearts and memories?"
-        );
+  appTitle.textContent =
+    "Messages";
 
 
-      if (
-        !confirmed
-      ) {
-        return;
-      }
-
-
-      hearts =
-        0;
-
-
-      memories =
-        [];
-
-
-      saveData();
-
-
-      heartCount.textContent =
-        hearts;
-
-
-      renderMemories();
-
-
-      setDialogue(
-        "A fresh start? Okay. Come here."
-      );
-
-    }
+  messageBadge.classList.add(
+    "hidden"
   );
 
 
-// TIME GREETING
+  appContent.innerHTML =
+    `
+    <div class="contact-card">
 
-function startupGreeting() {
+      <div class="contact-avatar">
+        E
+      </div>
 
-  const hour =
-    new Date()
-      .getHours();
+      <div>
+        <strong>Elias ♡</strong>
+
+        <small>
+          online-ish
+        </small>
+      </div>
+
+    </div>
 
 
-  if (
-    hour >= 0 &&
-    hour < 5
-  ) {
+    <div
+      id="chat"
+      class="chat"
+    >
 
-    setDialogue(
-      "There you are.<br>Why are we awake this late?"
+      <div class="bubble elias">
+        hey
+      </div>
+
+      <div class="bubble elias">
+        you alive?
+      </div>
+
+      <div class="bubble elias">
+        come here.
+      </div>
+
+    </div>
+
+
+    <div
+      id="fakeReplies"
+      class="fake-reply-area"
+    >
+
+      <button
+        class="reply-button"
+        data-reply="I'm here 😭"
+      >
+        I'm here 😭
+      </button>
+
+      <button
+        class="reply-button"
+        data-reply="What do you want?"
+      >
+        What do you want?
+      </button>
+
+      <button
+        class="reply-button"
+        data-reply="Mori is cuter."
+      >
+        Mori is cuter.
+      </button>
+
+    </div>
+    `;
+
+
+  document
+    .querySelectorAll(
+      ".reply-button"
+    )
+    .forEach(
+      function(button) {
+
+        button.addEventListener(
+          "click",
+          function() {
+
+            sendFakeReply(
+              button.dataset.reply
+            );
+
+          }
+        );
+
+      }
     );
-
-  }
-
-
-  else if (
-    hour < 10
-  ) {
-
-    setDialogue(
-      "Morning.<br>Come stay with me for five more minutes."
-    );
-
-  }
-
-
-  else if (
-    hour < 18
-  ) {
-
-    setDialogue(
-      "There you are.<br>What are we doing today?"
-    );
-
-  }
-
-
-  else {
-
-    setDialogue(
-      "There you are.<br>What are we doing tonight?"
-    );
-
-  }
 
 }
 
 
-// START
+function sendFakeReply(
+  text
+) {
 
-renderMemories();
+  const chat =
+    document.getElementById(
+      "chat"
+    );
 
-startupGreeting();
+
+  const replies =
+    document.getElementById(
+      "fakeReplies"
+    );
+
+
+  const myBubble =
+    document.createElement(
+      "div"
+    );
+
+
+  myBubble.className =
+    "bubble me";
+
+
+  myBubble.textContent =
+    text;
+
+
+  chat.appendChild(
+    myBubble
+  );
+
+
+  replies.innerHTML =
+    "";
+
+
+  setTimeout(
+    function() {
+
+      const eliasBubble =
+        document.createElement(
+          "div"
+        );
+
+
+      eliasBubble.className =
+        "bubble elias";
+
+
+      if (
+        text.includes(
+          "Mori"
+        )
+      ) {
+
+        eliasBubble.textContent =
+          "Wow. Betrayal in my own phone.";
+
+      }
+
+      else if (
+        text.includes(
+          "want"
+        )
+      ) {
+
+        eliasBubble.textContent =
+          "Your attention. Obviously.";
+
+      }
+
+      else {
+
+        eliasBubble.textContent =
+          "There you are. That's better.";
+
+      }
+
+
+      chat.appendChild(
+        eliasBubble
+      );
+
+
+      eliasBubble.scrollIntoView({
+        behavior:
+          "smooth"
+      });
+
+    },
+
+    500
+  );
+
+}
+
+
+// ========================================
+// PHOTOS
+// ========================================
+
+function renderPhotos() {
+
+  appTitle.textContent =
+    "Photos";
+
+
+  appContent.innerHTML =
+    `
+    <div class="photos-heading">
+
+      <small>
+        OUR LITTLE WORLD
+      </small>
+
+      <h3>
+        Favorites ♡
+      </h3>
+
+    </div>
+
+
+    <div class="photo-grid">
+
+      <button
+        class="photo-card"
+        data-photo="couple.PNG"
+        data-caption="Us ♡"
+      >
+
+        <img
+          src="couple.PNG"
+          alt=""
+        >
+
+      </button>
+
+
+      <button
+        class="photo-card"
+        data-photo="morii.PNG"
+        data-caption="Mori being Mori."
+      >
+
+        <img
+          src="morii.PNG"
+          alt=""
+        >
+
+      </button>
+
+
+      <button
+        class="photo-card"
+        data-photo="couple.PNG"
+        data-caption="One of my favorites."
+      >
+
+        <img
+          src="couple.PNG"
+          alt=""
+        >
+
+      </button>
+
+
+      <button
+        class="photo-card"
+        data-photo="morii.PNG"
+        data-caption="He absolutely owns this phone."
+      >
+
+        <img
+          src="morii.PNG"
+          alt=""
+        >
+
+      </button>
+
+    </div>
+    `;
+
+
+  document
+    .querySelectorAll(
+      ".photo-card"
+    )
+    .forEach(
+      function(card) {
+
+        card.addEventListener(
+          "click",
+          function() {
+
+            openPhoto(
+              card.dataset.photo,
+              card.dataset.caption
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+// ========================================
+// PHOTO VIEWER
+// ========================================
+
+function openPhoto(
+  src,
+  caption
+) {
+
+  bigPhoto.src =
+    src;
+
+
+  bigPhotoCaption.textContent =
+    caption;
+
+
+  photoOverlay.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+closePhoto.addEventListener(
+  "click",
+  function() {
+
+    photoOverlay.classList.add(
+      "hidden"
+    );
+
+  }
+);
+
+
+// ========================================
+// NOTES
+// ========================================
+
+function renderNotes() {
+
+  appTitle.textContent =
+    "Notes";
+
+
+  appContent.innerHTML =
+    `
+    <div class="note-card">
+
+      <small>
+        PINNED
+      </small>
+
+      <h3>
+        things Marie keeps stealing
+      </h3>
+
+      <p>
+        • my hoodies<br>
+        • half my blanket<br>
+        • my sushi<br>
+        • Mori's attention<br>
+        • apparently my entire phone
+      </p>
+
+    </div>
+
+
+    <div class="note-card">
+
+      <small>
+        ELIAS
+      </small>
+
+      <h3>
+        important
+      </h3>
+
+      <p>
+        Buy sushi.<br>
+        Stop letting Mori manipulate me.<br>
+        Neither of these things will happen.
+      </p>
+
+    </div>
+
+
+    <div class="note-card">
+
+      <small>
+        01:47
+      </small>
+
+      <h3>
+        reminder
+      </h3>
+
+      <p>
+        Tell Marie to go to sleep.
+        She will ignore this.
+      </p>
+
+    </div>
+    `;
+
+}
+
+
+// ========================================
+// MORI CAM
+// ========================================
+
+function renderMori() {
+
+  appTitle.textContent =
+    "Mori Cam";
+
+
+  appContent.innerHTML =
+    `
+    <div class="mori-cam">
+
+      <img
+        src="morii.PNG"
+        alt="Mori"
+      >
+
+      <h3>
+        Mori Cam 🐈‍⬛
+      </h3>
+
+      <p id="moriCamText">
+        Live status: pretending he doesn't need anybody.
+      </p>
+
+      <button
+        id="moriCamButton"
+        class="mori-button"
+      >
+        Check Mori
+      </button>
+
+    </div>
+    `;
+
+
+  document
+    .getElementById(
+      "moriCamButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        const text =
+          document.getElementById(
+            "moriCamText"
+          );
+
+
+        const events = [
+
+          "Mori knocked something over. No regrets.",
+
+          "Mori is asleep in the most inconvenient place possible.",
+
+          "Mori wants food. He ate recently. This is irrelevant.",
+
+          "Mori is staring directly into the camera.",
+
+          "Mori has stolen Elias's seat again.",
+
+          "Mori is purring. Mission accomplished."
+
+        ];
+
+
+        text.textContent =
+          events[
+            Math.floor(
+              Math.random() *
+              events.length
+            )
+          ];
+
+      }
+    );
+
+}
+
+
+// ========================================
+// CALENDAR
+// ========================================
+
+function renderCalendar() {
+
+  appTitle.textContent =
+    "Calendar";
+
+
+  appContent.innerHTML =
+    `
+    <div class="calendar-event">
+
+      <small>
+        TODAY · 19:00
+      </small>
+
+      <strong>
+        Movie night ♡
+      </strong>
+
+      <p>
+        Elias claims you choose the movie.
+        Elias will complain about the movie.
+      </p>
+
+    </div>
+
+
+    <div class="calendar-event">
+
+      <small>
+        FRIDAY · 20:30
+      </small>
+
+      <strong>
+        Sushi Date 🍣
+      </strong>
+
+      <p>
+        Sit beside Elias, apparently.
+        Sitting opposite him has been forbidden.
+      </p>
+
+    </div>
+
+
+    <div class="calendar-event">
+
+      <small>
+        SOMETIME
+      </small>
+
+      <strong>
+        Give Mori attention
+      </strong>
+
+      <p>
+        This event repeats approximately every eleven minutes.
+      </p>
+
+    </div>
+    `;
+
+}
+
+
+// ========================================
+// MUSIC
+// ========================================
+
+function renderMusic() {
+
+  appTitle.textContent =
+    "Music";
+
+
+  appContent.innerHTML =
+    `
+    <div class="music-player">
+
+      <div class="album-art">
+        ♡
+      </div>
+
+      <h3>
+        Our Song
+      </h3>
+
+      <p>
+        Marie × Elias
+      </p>
+
+      <button
+        id="playButton"
+        class="play-button"
+      >
+        ▶
+      </button>
+
+    </div>
+    `;
+
+
+  const button =
+    document.getElementById(
+      "playButton"
+    );
+
+
+  let playing =
+    false;
+
+
+  button.addEventListener(
+    "click",
+    function() {
+
+      playing =
+        !playing;
+
+
+      button.textContent =
+        playing
+          ? "Ⅱ"
+          : "▶";
+
+    }
+  );
+
+}
+
+
+// ========================================
+// US
+// ========================================
+
+function renderUs() {
+
+  appTitle.textContent =
+    "Us ♡";
+
+
+  appContent.innerHTML =
+    `
+    <div class="photos-heading">
+
+      <small>
+        MARIE × ELIAS
+      </small>
+
+      <h3>
+        Our Little World
+      </h3>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        STATUS
+      </small>
+
+      <strong>
+        disgustingly attached ♡
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        CURRENT PLAN
+      </small>
+
+      <strong>
+        probably sushi
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        THIRD WHEEL
+      </small>
+
+      <strong>
+        Mori, apparently
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        ELIAS SAYS
+      </small>
+
+      <strong>
+        come here.
+      </strong>
+
+    </div>
+    `;
+
+}
+
+
+// ========================================
+// SETTINGS
+// ========================================
+
+function renderSettings() {
+
+  appTitle.textContent =
+    "Settings";
+
+
+  appContent.innerHTML =
+    `
+    <div class="info-card">
+
+      <small>
+        DEVICE
+      </small>
+
+      <strong>
+        Elias OS
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        VERSION
+      </small>
+
+      <strong>
+        1.0
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        OWNER
+      </small>
+
+      <strong>
+        Marie ♡
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        MORI ACCESS
+      </small>
+
+      <strong>
+        unfortunately unlimited
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        API COST
+      </small>
+
+      <strong>
+        €0.00 😌
+      </strong>
+
+    </div>
+    `;
+
+}
