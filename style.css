@@ -1567,3 +1567,49 @@ button.small-widget {
   background: #d8849f;
   color: #241119;
 }
+
+.music-progress-wrap {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 22px;
+}
+
+.music-progress {
+  width: 100%;
+  accent-color: #d8849f;
+}
+
+.music-time {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 6px;
+
+  color: #9f838f;
+
+  font-size: 10px;
+}
+
+.album-art.playing {
+  animation:
+    albumPulse
+    2.5s
+    ease-in-out
+    infinite;
+}
+
+@keyframes albumPulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
