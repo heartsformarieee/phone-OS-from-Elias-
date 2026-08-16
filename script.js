@@ -1,8 +1,8 @@
 // ========================================
-// ELIAS OS 1.4
-// FULL MEDIA PLAYER + CALLS
+// ELIAS OS 1.4.1
+// FIXED MUSIC ARTWORK LAYOUT
 // LOCK SCREEN + NOTIFICATIONS
-// PHOTOS + SCRAPBOOK
+// PHOTOS + SCRAPBOOK + REAL MUSIC + CALLS
 // ========================================
 
 
@@ -550,7 +550,7 @@ setInterval(
 
 
 // ========================================
-// HELPER
+// HELPERS
 // ========================================
 
 function randomItem(array) {
@@ -788,7 +788,6 @@ function createNowPlayingCard() {
       function(event) {
 
         event.stopPropagation();
-
 
         toggleMusic();
 
@@ -1352,7 +1351,6 @@ function unlockPhone() {
   );
 
 
-  // Small chance Elias calls after unlocking.
   if (
     Math.random() < 0.12
   ) {
@@ -2396,12 +2394,16 @@ function renderMusic() {
     <div class="music-player">
 
 
-      <img
-        id="albumArt"
-        class="real-album-art"
-        src="${song.artwork}"
-        alt="${song.title}"
-      >
+      <div class="album-art-shell">
+
+        <img
+          id="albumArt"
+          class="real-album-art"
+          src="${song.artwork}"
+          alt="${song.title}"
+        >
+
+      </div>
 
 
       <h3>
@@ -2724,7 +2726,7 @@ function renderSettings() {
       </small>
 
       <strong>
-        1.4
+        1.4.1
       </strong>
 
     </div>
