@@ -1,153 +1,267 @@
 // ========================================
-// ELIAS OS 1.1
+// ELIAS OS 1.2
 // LOCK SCREEN + NOTIFICATIONS
+// PHOTOS + US SCRAPBOOK
 // ========================================
 
 
+// ========================================
 // ELEMENTS
+// ========================================
 
 const lockScreen =
-  document.getElementById(
-    "lockScreen"
-  );
+  document.getElementById("lockScreen");
 
 const lockTime =
-  document.getElementById(
-    "lockTime"
-  );
+  document.getElementById("lockTime");
 
 const lockDate =
-  document.getElementById(
-    "lockDate"
-  );
+  document.getElementById("lockDate");
 
 const statusBar =
-  document.getElementById(
-    "statusBar"
-  );
+  document.getElementById("statusBar");
 
 const statusTime =
-  document.getElementById(
-    "statusTime"
-  );
+  document.getElementById("statusTime");
 
 const homeGreeting =
-  document.getElementById(
-    "homeGreeting"
-  );
+  document.getElementById("homeGreeting");
 
 const weekdayText =
-  document.getElementById(
-    "weekdayText"
-  );
+  document.getElementById("weekdayText");
 
 const dayNumber =
-  document.getElementById(
-    "dayNumber"
-  );
+  document.getElementById("dayNumber");
 
 const monthText =
-  document.getElementById(
-    "monthText"
-  );
+  document.getElementById("monthText");
 
 const calendarIconDay =
-  document.getElementById(
-    "calendarIconDay"
-  );
+  document.getElementById("calendarIconDay");
 
 const calendarIconNumber =
-  document.getElementById(
-    "calendarIconNumber"
-  );
+  document.getElementById("calendarIconNumber");
 
 const eliasNotification =
-  document.getElementById(
-    "eliasNotification"
-  );
+  document.getElementById("eliasNotification");
 
 const moriNotification =
-  document.getElementById(
-    "moriNotification"
-  );
+  document.getElementById("moriNotification");
 
 const calendarNotification =
-  document.getElementById(
-    "calendarNotification"
-  );
+  document.getElementById("calendarNotification");
 
 const eliasWidget =
-  document.getElementById(
-    "eliasWidget"
-  );
+  document.getElementById("eliasWidget");
 
 const eliasWidgetText =
-  document.getElementById(
-    "eliasWidgetText"
-  );
+  document.getElementById("eliasWidgetText");
 
 const moriWidget =
-  document.getElementById(
-    "moriWidget"
-  );
+  document.getElementById("moriWidget");
 
 const moriWidgetText =
-  document.getElementById(
-    "moriWidgetText"
-  );
+  document.getElementById("moriWidgetText");
 
 const messageBadge =
-  document.getElementById(
-    "messageBadge"
-  );
+  document.getElementById("messageBadge");
 
 const homeScreen =
-  document.getElementById(
-    "homeScreen"
-  );
+  document.getElementById("homeScreen");
 
 const appWindow =
-  document.getElementById(
-    "appWindow"
-  );
+  document.getElementById("appWindow");
 
 const appTitle =
-  document.getElementById(
-    "appTitle"
-  );
+  document.getElementById("appTitle");
 
 const appContent =
-  document.getElementById(
-    "appContent"
-  );
+  document.getElementById("appContent");
 
 const closeApp =
-  document.getElementById(
-    "closeApp"
-  );
+  document.getElementById("closeApp");
 
 const photoOverlay =
-  document.getElementById(
-    "photoOverlay"
-  );
+  document.getElementById("photoOverlay");
 
 const bigPhoto =
-  document.getElementById(
-    "bigPhoto"
-  );
+  document.getElementById("bigPhoto");
 
 const bigPhotoCaption =
-  document.getElementById(
-    "bigPhotoCaption"
-  );
+  document.getElementById("bigPhotoCaption");
 
 const closePhoto =
-  document.getElementById(
-    "closePhoto"
-  );
+  document.getElementById("closePhoto");
 
 
-// CLOCK
+// ========================================
+// PHOTO FILES
+// ========================================
+
+const photoFiles = [
+
+  {
+    src: "kissing.PNG",
+    caption: "Kissing ♡"
+  },
+
+  {
+    src: "expensive gifts.PNG",
+    caption: "Expensive gifts ♡"
+  },
+
+  {
+    src: "these eyes.PNG",
+    caption: "These eyes."
+  },
+
+  {
+    src: "walk.PNG",
+    caption: "Night walk."
+  },
+
+  {
+    src: "sukuna cosplay.PNG",
+    caption: "Sukuna cosplay."
+  },
+
+  {
+    src: "sushi.PNG",
+    caption: "Sushi date 🍣"
+  },
+
+  {
+    src: "home.PNG",
+    caption: "At home together."
+  },
+
+  {
+    src: "cooking.PNG",
+    caption: "Cooking together."
+  },
+
+  {
+    src: "flowers.PNG",
+    caption: "Flowers ♡"
+  },
+
+  {
+    src: "mirror pic.PNG",
+    caption: "Mirror pic."
+  },
+
+  {
+    src: "ring gifting.PNG",
+    caption: "Ring gifting ♡"
+  },
+
+  {
+    src: "morii.PNG",
+    caption: "Mori 🐈‍⬛"
+  },
+
+  {
+    src: "on a walk.JPG",
+    caption: "On a walk."
+  },
+
+  {
+    src: "hello kitty bubble tea.JPG",
+    caption: "Hello Kitty bubble tea."
+  },
+
+  {
+    src: "holding hands.PNG",
+    caption: "Holding hands ♡"
+  },
+
+  {
+    src: "couple.PNG",
+    caption: "Us ♡"
+  }
+
+];
+
+
+// ========================================
+// SCRAPBOOK FILES
+// ========================================
+
+const scrapbookPages = [
+
+  {
+    src: "page one.PNG",
+    title: "Page One"
+  },
+
+  {
+    src: "page two.PNG",
+    title: "Page Two"
+  },
+
+  {
+    src: "page three.PNG",
+    title: "Page Three"
+  },
+
+  {
+    src: "page four.PNG",
+    title: "Page Four"
+  },
+
+  {
+    src: "page six.PNG",
+    title: "Page Six"
+  },
+
+  {
+    src: "page seven.PNG",
+    title: "Page Seven"
+  },
+
+  {
+    src: "page eight.PNG",
+    title: "Page Eight"
+  },
+
+  {
+    src: "page nine.PNG",
+    title: "Page Nine"
+  },
+
+  {
+    src: "page ten.PNG",
+    title: "Page Ten"
+  },
+
+  {
+    src: "page eleven.PNG",
+    title: "Page Eleven"
+  },
+
+  {
+    src: "page twelve.PNG",
+    title: "Page Twelve"
+  },
+
+  {
+    src: "page thirteen.PNG",
+    title: "Page Thirteen"
+  },
+
+  {
+    src: "page fourteen.PNG",
+    title: "Page Fourteen"
+  }
+
+];
+
+let currentScrapbookIndex = 0;
+
+
+// ========================================
+// CLOCK + DATE
+// ========================================
 
 function updateClock() {
 
@@ -217,33 +331,35 @@ function updateClock() {
   }
 
 
-  const weekdays =
-    [
-      "SUNDAY",
-      "MONDAY",
-      "TUESDAY",
-      "WEDNESDAY",
-      "THURSDAY",
-      "FRIDAY",
-      "SATURDAY"
-    ];
+  const weekdays = [
+
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY"
+
+  ];
 
 
-  const months =
-    [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
+  const months = [
+
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+
+  ];
 
 
   weekdayText.textContent =
@@ -286,7 +402,25 @@ setInterval(
 );
 
 
-// NOTIFICATIONS
+// ========================================
+// RANDOM HELPER
+// ========================================
+
+function randomItem(array) {
+
+  return array[
+    Math.floor(
+      Math.random() *
+      array.length
+    )
+  ];
+
+}
+
+
+// ========================================
+// LOCK SCREEN NOTIFICATIONS
+// ========================================
 
 const eliasNotifications = [
 
@@ -308,7 +442,17 @@ const eliasNotifications = [
 
   "I miss your face.",
 
-  "you better not be ignoring me for Mori."
+  "you better not be ignoring me for Mori.",
+
+  "you've been gone for suspiciously long.",
+
+  "I found another photo of us I like.",
+
+  "open the phone already.",
+
+  "Marieeeee.",
+
+  "I require attention."
 
 ];
 
@@ -325,7 +469,15 @@ const moriNotifications = [
 
   "Motion detected near food bowl.",
 
-  "Mori appears to be plotting something."
+  "Mori appears to be plotting something.",
+
+  "Mori is asleep. Somehow this feels suspicious.",
+
+  "Mori has entered the room.",
+
+  "Mori has ignored Elias completely.",
+
+  "Possible crime detected. Suspect: Mori."
 
 ];
 
@@ -342,23 +494,17 @@ const calendarNotifications = [
 
   "Stay-home date tonight.",
 
-  "Reminder: steal Elias's hoodie."
+  "Reminder: steal Elias's hoodie.",
+
+  "Tonight: do absolutely nothing together ♡",
+
+  "Possible spontaneous sushi emergency.",
+
+  "Reminder: annoy Elias lovingly.",
+
+  "Photo dump night ♡"
 
 ];
-
-
-function randomItem(
-  array
-) {
-
-  return array[
-    Math.floor(
-      Math.random() *
-      array.length
-    )
-  ];
-
-}
 
 
 function loadNotifications() {
@@ -386,7 +532,9 @@ function loadNotifications() {
 loadNotifications();
 
 
-// LOCK / UNLOCK
+// ========================================
+// LOCK + UNLOCK
+// ========================================
 
 function unlockPhone() {
 
@@ -432,6 +580,9 @@ function lockPhone() {
   loadNotifications();
 
 
+  updateClock();
+
+
   lockScreen.classList.remove(
     "hidden"
   );
@@ -445,7 +596,9 @@ lockScreen.addEventListener(
 );
 
 
+// ========================================
 // ELIAS WIDGET
+// ========================================
 
 const eliasWidgetLines = [
 
@@ -467,7 +620,17 @@ const eliasWidgetLines = [
 
   "We should get sushi.",
 
-  "Stay for a while."
+  "Stay for a while.",
+
+  "You're back ♡",
+
+  "I have absolutely nothing important to say.",
+
+  "Actually, wait. Come here.",
+
+  "Mori thinks this is his phone.",
+
+  "You found me again."
 
 ];
 
@@ -485,7 +648,9 @@ eliasWidget.addEventListener(
 );
 
 
+// ========================================
 // MORI WIDGET
+// ========================================
 
 const moriLines = [
 
@@ -501,7 +666,13 @@ const moriLines = [
 
   "pretending not to care",
 
-  "watching everything"
+  "watching everything",
+
+  "committing crimes",
+
+  "demanding attention",
+
+  "ignoring Elias"
 
 ];
 
@@ -519,7 +690,9 @@ moriWidget.addEventListener(
 );
 
 
-// APP OPENING
+// ========================================
+// OPEN APPS
+// ========================================
 
 document
   .querySelectorAll(
@@ -543,9 +716,7 @@ document
   );
 
 
-function openApp(
-  app
-) {
+function openApp(app) {
 
   homeScreen.classList.add(
     "hidden"
@@ -567,8 +738,7 @@ function openApp(
 
 
   if (
-    app ===
-    "messages"
+    app === "messages"
   ) {
 
     renderMessages();
@@ -577,8 +747,7 @@ function openApp(
 
 
   if (
-    app ===
-    "photos"
+    app === "photos"
   ) {
 
     renderPhotos();
@@ -587,8 +756,7 @@ function openApp(
 
 
   if (
-    app ===
-    "notes"
+    app === "notes"
   ) {
 
     renderNotes();
@@ -597,8 +765,7 @@ function openApp(
 
 
   if (
-    app ===
-    "mori"
+    app === "mori"
   ) {
 
     renderMori();
@@ -607,8 +774,7 @@ function openApp(
 
 
   if (
-    app ===
-    "calendar"
+    app === "calendar"
   ) {
 
     renderCalendar();
@@ -617,8 +783,7 @@ function openApp(
 
 
   if (
-    app ===
-    "music"
+    app === "music"
   ) {
 
     renderMusic();
@@ -627,8 +792,7 @@ function openApp(
 
 
   if (
-    app ===
-    "favorites"
+    app === "favorites"
   ) {
 
     renderUs();
@@ -637,8 +801,7 @@ function openApp(
 
 
   if (
-    app ===
-    "settings"
+    app === "settings"
   ) {
 
     renderSettings();
@@ -654,7 +817,9 @@ function openApp(
 }
 
 
+// ========================================
 // CLOSE APP
+// ========================================
 
 closeApp.addEventListener(
   "click",
@@ -684,7 +849,9 @@ closeApp.addEventListener(
 );
 
 
+// ========================================
 // MESSAGES
+// ========================================
 
 function renderMessages() {
 
@@ -752,12 +919,14 @@ function renderMessages() {
         I'm here 😭
       </button>
 
+
       <button
         class="reply-button"
         data-reply="What do you want?"
       >
         What do you want?
       </button>
+
 
       <button
         class="reply-button"
@@ -794,9 +963,7 @@ function renderMessages() {
 }
 
 
-function sendFakeReply(
-  text
-) {
+function sendFakeReply(text) {
 
   const chat =
     document.getElementById(
@@ -882,8 +1049,10 @@ function sendFakeReply(
 
 
       eliasBubble.scrollIntoView({
+
         behavior:
           "smooth"
+
       });
 
     },
@@ -894,7 +1063,9 @@ function sendFakeReply(
 }
 
 
-// PHOTOS
+// ========================================
+// PHOTOS APP
+// ========================================
 
 function renderPhotos() {
 
@@ -902,69 +1073,62 @@ function renderPhotos() {
     "Photos";
 
 
-  appContent.innerHTML =
+  let photosHTML =
     `
     <div class="photos-heading">
 
       <small>
-        OUR LITTLE WORLD
+        ELIAS OS GALLERY
       </small>
 
       <h3>
-        Favorites ♡
+        Photos ♡
       </h3>
 
     </div>
 
 
+    <div class="photos-meta">
+      ${photoFiles.length} photos
+    </div>
+
+
     <div class="photo-grid">
+    `;
 
-      <button
-        class="photo-card"
-        data-photo="couple.PNG"
-        data-caption="Us ♡"
-      >
-        <img
-          src="couple.PNG"
-          alt=""
+
+  photoFiles.forEach(
+    function(photo) {
+
+      photosHTML +=
+        `
+        <button
+          class="photo-card"
+          data-photo="${photo.src}"
+          data-caption="${photo.caption}"
+          type="button"
         >
-      </button>
 
-      <button
-        class="photo-card"
-        data-photo="morii.PNG"
-        data-caption="Mori being Mori."
-      >
-        <img
-          src="morii.PNG"
-          alt=""
-        >
-      </button>
+          <img
+            src="${photo.src}"
+            alt="${photo.caption}"
+          >
 
-      <button
-        class="photo-card"
-        data-photo="couple.PNG"
-        data-caption="One of my favorites."
-      >
-        <img
-          src="couple.PNG"
-          alt=""
-        >
-      </button>
+        </button>
+        `;
 
-      <button
-        class="photo-card"
-        data-photo="morii.PNG"
-        data-caption="He absolutely owns this phone."
-      >
-        <img
-          src="morii.PNG"
-          alt=""
-        >
-      </button>
+    }
+  );
 
+
+  photosHTML +=
+    `
     </div>
     `;
+
+
+  appContent.innerHTML =
+    photosHTML;
 
 
   document
@@ -992,7 +1156,230 @@ function renderPhotos() {
 }
 
 
+// ========================================
+// US ♡ SCRAPBOOK APP
+// ========================================
+
+function renderUs() {
+
+  appTitle.textContent =
+    "Us ♡";
+
+
+  currentScrapbookIndex =
+    0;
+
+
+  drawScrapbookPage();
+
+}
+
+
+function drawScrapbookPage() {
+
+  const current =
+    scrapbookPages[
+      currentScrapbookIndex
+    ];
+
+
+  appContent.innerHTML =
+    `
+    <div class="photos-heading">
+
+      <small>
+        MARIE × ELIAS
+      </small>
+
+      <h3>
+        Our Scrapbook ♡
+      </h3>
+
+    </div>
+
+
+    <div class="scrapbook-meta">
+      ${scrapbookPages.length} memories
+    </div>
+
+
+    <div class="scrapbook-viewer">
+
+
+      <button
+        id="scrapbookOpen"
+        class="scrapbook-frame"
+        type="button"
+      >
+
+        <img
+          src="${current.src}"
+          alt="${current.title}"
+        >
+
+      </button>
+
+
+      <div class="scrapbook-caption">
+
+        ${current.title}
+
+      </div>
+
+
+      <div class="scrapbook-count">
+
+        Memory ${
+          currentScrapbookIndex + 1
+        }
+        of
+        ${scrapbookPages.length}
+
+      </div>
+
+
+      <div class="scrapbook-controls">
+
+
+        <button
+          id="prevPage"
+          class="scrapbook-button"
+          type="button"
+          ${
+            currentScrapbookIndex === 0
+              ? "disabled"
+              : ""
+          }
+        >
+          ‹ Previous
+        </button>
+
+
+        <button
+          id="nextPage"
+          class="scrapbook-button"
+          type="button"
+          ${
+            currentScrapbookIndex ===
+            scrapbookPages.length - 1
+              ? "disabled"
+              : ""
+          }
+        >
+          Next ›
+        </button>
+
+
+      </div>
+
+
+      <button
+        id="openFullscreenPage"
+        class="scrapbook-open-button"
+        type="button"
+      >
+        Open Fullscreen ♡
+      </button>
+
+
+    </div>
+    `;
+
+
+  const prevPage =
+    document.getElementById(
+      "prevPage"
+    );
+
+
+  const nextPage =
+    document.getElementById(
+      "nextPage"
+    );
+
+
+  const scrapbookOpen =
+    document.getElementById(
+      "scrapbookOpen"
+    );
+
+
+  const openFullscreenPage =
+    document.getElementById(
+      "openFullscreenPage"
+    );
+
+
+  prevPage.addEventListener(
+    "click",
+    function() {
+
+      if (
+        currentScrapbookIndex > 0
+      ) {
+
+        currentScrapbookIndex--;
+
+
+        drawScrapbookPage();
+
+      }
+
+    }
+  );
+
+
+  nextPage.addEventListener(
+    "click",
+    function() {
+
+      if (
+        currentScrapbookIndex <
+        scrapbookPages.length - 1
+      ) {
+
+        currentScrapbookIndex++;
+
+
+        drawScrapbookPage();
+
+      }
+
+    }
+  );
+
+
+  scrapbookOpen.addEventListener(
+    "click",
+    function() {
+
+      openPhoto(
+        current.src,
+        `Our Scrapbook — ${current.title}`
+      );
+
+    }
+  );
+
+
+  openFullscreenPage.addEventListener(
+    "click",
+    function() {
+
+      openPhoto(
+        current.src,
+        `Our Scrapbook — ${current.title}`
+      );
+
+    }
+  );
+
+}
+
+
+// ========================================
 // PHOTO VIEWER
+// ========================================
 
 function openPhoto(
   src,
@@ -1026,7 +1413,28 @@ closePhoto.addEventListener(
 );
 
 
+photoOverlay.addEventListener(
+  "click",
+  function(event) {
+
+    if (
+      event.target ===
+      photoOverlay
+    ) {
+
+      photoOverlay.classList.add(
+        "hidden"
+      );
+
+    }
+
+  }
+);
+
+
+// ========================================
 // NOTES
+// ========================================
 
 function renderNotes() {
 
@@ -1097,7 +1505,9 @@ function renderNotes() {
 }
 
 
+// ========================================
 // MORI CAM
+// ========================================
 
 function renderMori() {
 
@@ -1125,6 +1535,7 @@ function renderMori() {
       <button
         id="moriCamButton"
         class="mori-button"
+        type="button"
       >
         Check Mori
       </button>
@@ -1159,7 +1570,15 @@ function renderMori() {
 
           "Mori has stolen Elias's seat again.",
 
-          "Mori is purring. Mission accomplished."
+          "Mori is purring. Mission accomplished.",
+
+          "Mori has vanished. This is suspicious.",
+
+          "Mori is watching you from across the room.",
+
+          "Mori has selected violence.",
+
+          "Mori is innocent. Allegedly."
 
         ];
 
@@ -1175,7 +1594,9 @@ function renderMori() {
 }
 
 
+// ========================================
 // CALENDAR
+// ========================================
 
 function renderCalendar() {
 
@@ -1241,7 +1662,9 @@ function renderCalendar() {
 }
 
 
+// ========================================
 // MUSIC
+// ========================================
 
 function renderMusic() {
 
@@ -1268,6 +1691,7 @@ function renderMusic() {
       <button
         id="playButton"
         class="play-button"
+        type="button"
       >
         ▶
       </button>
@@ -1305,85 +1729,9 @@ function renderMusic() {
 }
 
 
-// US
-
-function renderUs() {
-
-  appTitle.textContent =
-    "Us ♡";
-
-
-  appContent.innerHTML =
-    `
-    <div class="photos-heading">
-
-      <small>
-        MARIE × ELIAS
-      </small>
-
-      <h3>
-        Our Little World
-      </h3>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <small>
-        STATUS
-      </small>
-
-      <strong>
-        disgustingly attached ♡
-      </strong>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <small>
-        CURRENT PLAN
-      </small>
-
-      <strong>
-        probably sushi
-      </strong>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <small>
-        THIRD WHEEL
-      </small>
-
-      <strong>
-        Mori, apparently
-      </strong>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <small>
-        ELIAS SAYS
-      </small>
-
-      <strong>
-        come here.
-      </strong>
-
-    </div>
-    `;
-
-}
-
-
+// ========================================
 // SETTINGS
+// ========================================
 
 function renderSettings() {
 
@@ -1413,7 +1761,7 @@ function renderSettings() {
       </small>
 
       <strong>
-        1.1
+        1.2
       </strong>
 
     </div>
@@ -1427,6 +1775,32 @@ function renderSettings() {
 
       <strong>
         Marie ♡
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        PHOTOS
+      </small>
+
+      <strong>
+        ${photoFiles.length} photos
+      </strong>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <small>
+        SCRAPBOOK
+      </small>
+
+      <strong>
+        ${scrapbookPages.length} memories
       </strong>
 
     </div>
@@ -1478,3 +1852,12 @@ function renderSettings() {
     );
 
 }
+
+
+// ========================================
+// START
+// ========================================
+
+updateClock();
+
+loadNotifications();
